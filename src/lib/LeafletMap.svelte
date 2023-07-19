@@ -2,8 +2,7 @@
     import { onMount, onDestroy } from "svelte";
     import { browser } from "$app/environment";
     import places from "./places.json";
-    import "leaflet/dist/images/marker-shadow.png";
-    import "leaflet/dist/images/marker-icon.png";
+    import marker from "./icons8-marker-64.png"
 
     let mapElement;
     let map;
@@ -11,6 +10,15 @@
     onMount(async () => {
         if (browser) {
             const leaflet = await import("leaflet");
+            let defaultIcon = leaflet.icon({
+                iconUrl: marker,
+
+                iconSize:     [25, 41], // size of the icon
+                shadowSize:   [41, 41], // size of the shadow
+                iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+                shadowAnchor: [4, 62],  // the same for the shadow
+                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+            });
             map = leaflet.map(mapElement).setView([22.3, 114.16], 4);
             leaflet
                 .tileLayer(
@@ -24,7 +32,8 @@
                 .addTo(map);
 
             places.forEach((city) => {
-                leaflet.marker([city.Latitude, city.Longitude]).addTo(map);
+                leaflet.marker([city.Latitude, city.Longitude], { icon: defaultIcon })
+                .addTo(map);
             });
         }
     });
