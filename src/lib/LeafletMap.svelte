@@ -1,7 +1,10 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte";
     import { browser } from "$app/environment";
-    import places   from "./places.json";
+    import places from "./places.json";
+    import "leaflet/dist/images/marker-shadow.png";
+    import "leaflet/dist/images/marker-icon.png";
+
     let mapElement;
     let map;
 
@@ -19,11 +22,9 @@
                     }
                 )
                 .addTo(map);
-            
-            places.forEach(city => {
-                leaflet
-                .marker([city.Latitude, city.Longitude])
-                .addTo(map)
+
+            places.forEach((city) => {
+                leaflet.marker([city.Latitude, city.Longitude]).addTo(map);
             });
         }
     });
