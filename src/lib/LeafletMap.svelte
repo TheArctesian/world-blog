@@ -42,6 +42,7 @@
 
 <style>
     @import "leaflet/dist/leaflet.css";
+    @import url("https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css");
     main div {
         height: 98vh;
         width: 98.5vw;
