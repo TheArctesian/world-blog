@@ -6,7 +6,4 @@
 <LeafletMap />
 </div>
 <style>
-    div{
-        border: 0.2rem var(--purple) solid
-    }
 </style>

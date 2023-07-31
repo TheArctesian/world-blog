@@ -574,5 +574,35 @@
     "Date": "",
     "Latitude": 5.9784,
     "Longitude": 116.0853
+  },
+  {
+    "City": "Merzouga",
+    "Date": "2023",
+    "Latitude": 31.0802,
+    "Longitude": -4.0134
+  },
+  {
+    "City": "Fez",
+    "Date": "2023",
+    "Latitude": 34.0181,
+    "Longitude": -5.0078
+  },
+  {
+    "City": "Errachidia",
+    "Date": "2023",
+    "Latitude": 31.9315,
+    "Longitude": -4.4268
+  },
+  {
+    "City": "Chefchaouen",
+    "Date": "2023",
+    "Latitude": 35.1688,
+    "Longitude": -5.2687
+  },
+  {
+    "City": "Casablanca",
+    "Date": "2023",
+    "Latitude": 33.5731,
+    "Longitude": -7.5898
   }
 ]
