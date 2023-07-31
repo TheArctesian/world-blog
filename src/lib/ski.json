@@ -1,0 +1,66 @@
+[
+  {
+    "City": "Les Arc",
+    "Date": "July 2022",
+    "Latitude": 45.0656,
+    "Longitude": 6.7247
+  },
+  {
+    "City": "Oberlech",
+    "Date": "Jan 2009",
+    "Latitude": 47.2095,
+    "Longitude": 10.1256
+  },
+  {
+    "City": "Niseko",
+    "Date": "Feb 2008",
+    "Latitude": 42.7929,
+    "Longitude": 140.7409
+  },
+  {
+    "City": "Flims",
+    "Date": "December 2008",
+    "Latitude": 46.774,
+    "Longitude": 9.4458
+  },
+  {
+    "City": "Bariloche",
+    "Date": 2023,
+    "Latitude": -41.13,
+    "Longitude": -71.3133
+  },
+
+  {
+    "City": "Saas-Fee",
+    "Date": "Feb 2005",
+    "Latitude": 45.1092,
+    "Longitude": 7.9277,
+    "Notes": "First time in high altitudes, there was a man who passed out in the lift up which scared my mother but I was fine apparently."
+  },
+
+  {
+    "City": "Deer Valley",
+    "Date": "Feb 2015",
+    "Latitude": 40.6374,
+    "Longitude": -111.4782
+  },
+  {
+    "City": "Telluride",
+    "Date": "Jul 2022",
+    "Latitude": 37.9374,
+    "Longitude": -107.8481
+  },
+  {
+    "City": "Jackson Hole",
+    "Date": "Feb 2016",
+    "Latitude": 43.4799,
+    "Longitude": -110.7624
+  },
+  {
+    "City": "Whistler",
+    "Date": "March 2013",
+    "Latitude": 50.1164,
+    "Longitude": -122.9578,
+    "Notes": "Whistler is a place that I have visited many times in my life. It is a fantastic ski resort where many of my friends have places. The skiing is great but the town is also loads of fun as well. One place I always go back to is \"Cows\", the worlds best ice cream."
+  }
+]

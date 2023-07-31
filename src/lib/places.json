@@ -1,145 +1,135 @@
 [
   {
-    "City": "Whistler British Colombia",
-    "Date": 2014,
-    "Latitude": 50.1164,
-    "Longitude": -122.9578
+    "City": "Sitges",
+    "Date": "July 2005",
+    "Latitude": 41.2372,
+    "Longitude": 1.8059
   },
   {
-    "City": "Vanccover",
-    "Date": 2014,
+    "City": "Vancouver",
+    "Date": 2013,
     "Latitude": 49.2641,
-    "Longitude": -123.1207
+    "Longitude": -123.1207,
+    "Notes": "Generally we don't spend much time in the city, we have spent a night there and had some fantastic food but it's mainly a pit stop on the way to Whistler."
   },
   {
     "City": "Sacramento",
     "Date": 2022,
     "Latitude": 38.5816,
-    "Longitude": -121.4944
+    "Longitude": -121.4944,
+    "Notes": "My brother and I drove through here when we were traversing California. Was not really memorable enough for me to say anything significant."
   },
   {
     "City": "Oakland",
     "Date": 2019,
     "Latitude": 37.8044,
-    "Longitude": -122.2711
+    "Longitude": -122.2711,
+    "Notes": "Where I am currently attending university (UC Berkeley), and also where my brother attended. I will have more to write on this place in a while."
   },
   {
-    "City": "San Fransico",
-    "Date": 2013,
+    "City": "San Francisco",
+    "Date": "Feb 2015",
     "Latitude": 37.7749,
     "Longitude": -122.4194
   },
   {
     "City": "San Jose",
-    "Date": 2022,
+    "Date": "July 2022",
     "Latitude": 37.3382,
     "Longitude": -121.8863
   },
   {
     "City": "Los Angeles",
-    "Date": 2012,
+    "Date": "July 2012",
     "Latitude": 34.0522,
     "Longitude": -118.2437
   },
   {
     "City": "Salt lake City",
-    "Date": "",
+    "Date": "Feb 2015",
     "Latitude": 40.7608,
     "Longitude": -111.891
   },
   {
-    "City": "Seatle",
-    "Date": "",
+    "City": "Seattle",
+    "Date": "Aug 2010",
     "Latitude": 47.6062,
     "Longitude": -122.3321
   },
-  {
-    "City": "Mount Rainier",
-    "Date": "",
-    "Latitude": 46.8523,
-    "Longitude": -121.7603
-  },
+
   {
     "City": "Denver",
-    "Date": 2022,
+    "Date": "Jul 2022",
     "Latitude": 39.7392,
     "Longitude": -104.9903
   },
-  {
-    "City": "Telluride",
-    "Date": "",
-    "Latitude": 37.9374,
-    "Longitude": -107.8481
-  },
-  {
-    "City": "Jackson Hole",
-    "Date": "",
-    "Latitude": 43.4799,
-    "Longitude": -110.7624
-  },
+
   {
     "City": "Dallas",
-    "Date": "",
+    "Date": "Feb 2010",
     "Latitude": 32.7767,
     "Longitude": -96.797
   },
+
   {
-    "City": "Huston",
-    "Date": "",
+    "City": "Austin",
+    "Date": "Jul 2022",
     "Latitude": 29.7604,
     "Longitude": -95.3698
   },
   {
     "City": "San Antonio",
-    "Date": "",
+    "Date": "August 2006",
     "Latitude": 29.4241,
-    "Longitude": -98.4936
+    "Longitude": -98.4936,
+    "Notes": "Where my grandmother lives"
   },
   {
     "City": "Tampa",
-    "Date": "",
+    "Date": "October 2019",
     "Latitude": 27.9505,
     "Longitude": -82.4572
   },
   {
     "City": "New York",
-    "Date": "",
+    "Date": "July 2008",
     "Latitude": 40.7128,
     "Longitude": -74.006
   },
   {
-    "City": "New Jersy",
-    "Date": "",
+    "City": "New Jersey",
+    "Date": "Feb 2005",
     "Latitude": 40.0583,
     "Longitude": -74.4057
   },
   {
     "City": "Boston",
-    "Date": "",
+    "Date": "July 2013",
     "Latitude": 42.3601,
     "Longitude": -71.0589
   },
   {
-    "City": "Burlington Vermont",
-    "Date": "",
+    "City": "Burlington",
+    "Date": "July 2012",
     "Latitude": 44.4759,
     "Longitude": -73.2121
   },
-  {
-    "City": "Kingston Jamaica",
-    "Date": "",
+ {
+    "City": "Kingston",
+    "Date": "October 2005",
     "Latitude": 17.997,
-    "Longitude": -76.792
+    "Longitude": -76.792,
+    "Notes": "The place where I took my first steps"
   },
   {
-    "City": "Antigua and Barbura",
-    "Date": "",
-    "Latitude": 17.0608,
-    "Longitude": -61.7964
+    "City": "Bath",
+    "Date": "April 2005",
+    "Latitude": 51.3811,
+    "Longitude": -2.359
   },
   {
     "City": "Barbados",
-    "Date": "",
+    "Date": "September 2005",
     "Latitude": 13.1939,
     "Longitude": -59.5432
   },
@@ -149,459 +139,429 @@
     "Latitude": -34.6037,
     "Longitude": -58.3816
   },
-  {
-    "City": "Bariloche",
-    "Date": 2023,
-    "Latitude": -41.13,
-    "Longitude": -71.3133
-  },
-  {
+ {
     "City": "Cork",
-    "Date": "",
+    "Date": "Feb 2010",
     "Latitude": 51.8985,
-    "Longitude": -8.4756
+    "Longitude": -8.4756,
+    "Notes": "While I have been going here all my life the first time we stoped in town was then"
   },
   {
-    "City": "Bantry West Cork",
-    "Date": 2004,
+    "City": "Bantry",
+    "Date": "December 2004",
     "Latitude": 51.688,
-    "Longitude": -9.4547
+    "Longitude": -9.4547,
+    "Notes": "Where my mother is from in Ireland and where we go back to at least once a year."
   },
   {
     "City": "Limerick",
-    "Date": "",
+    "Date": "Jul 2005",
     "Latitude": 52.6638,
     "Longitude": -8.6267
   },
   {
     "City": "Galway",
-    "Date": "",
+    "Date": "Aug 2013",
     "Latitude": 53.2707,
     "Longitude": -9.0568
   },
   {
     "City": "Dublin",
-    "Date": "",
+    "Date": "Aug 2019",
     "Latitude": 53.3498,
     "Longitude": -6.2603
   },
   {
-    "City": "Plymouth England",
-    "Date": "",
-    "Latitude": 50.3754,
-    "Longitude": -4.1427
-  },
-  {
     "City": "London",
-    "Date": 2004,
+    "Date": "Sep 2004",
     "Latitude": 51.5074,
-    "Longitude": -0.1278
+    "Longitude": -0.1278,
+    "Notes": "My birthplace"
   },
   {
     "City": "Edinburgh",
-    "Date": 2018,
+    "Date": "Aug 2017",
     "Latitude": 55.9533,
     "Longitude": -3.1883
   },
   {
-    "City": "St Andrews (Scotland)",
-    "Date": 2018,
+    "City": "St Andrews",
+    "Date": "Aug 2017",
     "Latitude": 56.3397,
     "Longitude": -2.7976
   },
   {
     "City": "Paris",
-    "Date": 2022,
+    "Date": "July 2022",
     "Latitude": 48.8566,
     "Longitude": 2.3522
   },
-  {
-    "City": "Boreaux",
-    "Date": "",
-    "Latitude": 44.8373,
-    "Longitude": -0.5787
-  },
-  {
-    "City": "Les Arc (france)",
-    "Date": 2022,
-    "Latitude": 45.0656,
-    "Longitude": 6.7247
-  },
+
   {
     "City": "Geneva",
-    "Date": 2022,
+    "Date": "June 2022",
     "Latitude": 46.2043,
     "Longitude": 6.1432
   },
   {
     "City": "Barcelona",
-    "Date": 2005,
+    "Date": "June 2005",
     "Latitude": 41.3851,
     "Longitude": 2.1734
   },
   {
     "City": "Madrid",
-    "Date": 2023,
+    "Date": "Aug 2023",
     "Latitude": 40.4168,
     "Longitude": -3.7038
   },
   {
-    "City": "Tarragona",
-    "Date": "",
-    "Latitude": 41.1173,
-    "Longitude": 1.2445
+    "City": "Aran Islands",
+    "Date": "Aug 2013",
+    "Latitude": 53.1289,
+    "Longitude": -9.7197
   },
   {
-    "City": "Palma Spain",
-    "Date": "",
-    "Latitude": 39.5697,
-    "Longitude": 2.6502
+    "City": "Tarragona",
+    "Date": "July 2005",
+    "Latitude": 41.1173,
+    "Longitude": 1.2445,
+    "Notes": "We went for the waterpark lots of good memories"
   },
+
   {
     "City": "Bergamo",
-    "Date": 2022,
+    "Date": "July 2022",
     "Latitude": 45.6902,
     "Longitude": 9.6669
   },
   {
     "City": "Verona",
-    "Date": "",
+    "Date": "July 2014",
     "Latitude": 45.4384,
     "Longitude": 10.9916
   },
   {
     "City": "Venice",
-    "Date": "",
+    "Date": "July 2022",
     "Latitude": 45.4408,
     "Longitude": 12.3155
   },
   {
     "City": "Milan",
-    "Date": "",
+    "Date": "July 2022",
     "Latitude": 45.4642,
     "Longitude": 9.19
   },
   {
     "City": "Rome",
-    "Date": "",
+    "Date": "July 2014",
     "Latitude": 41.9028,
     "Longitude": 12.4964
   },
   {
-    "City": "Tuscany",
-    "Date": "",
-    "Latitude": 43.7691,
-    "Longitude": 11.2558
-  },
-  {
     "City": "Lake Como",
-    "Date": "",
+    "Date": "July 2022",
     "Latitude": 46,
     "Longitude": 9.2833
   },
-  {
-    "City": "Laax (Switzerland)",
-    "Date": "",
-    "Latitude": 46.774,
-    "Longitude": 9.4458
-  },
+
   {
     "City": "Zurich",
-    "Date": "",
+    "Date": "June 2016",
     "Latitude": 47.3769,
     "Longitude": 8.5417
   },
   {
     "City": "Basel",
-    "Date": "",
+    "Date": "Jul 2023",
     "Latitude": 47.5584,
     "Longitude": 7.5732
   },
   {
+    "City": "Zermatt",
+    "Date": "July 2016",
+    "Latitude": 46.0207,
+    "Longitude": 7.7491
+  },
+  {
     "City": "Zug",
-    "Date": "",
+    "Date": "Jul 2023",
     "Latitude": 47.17,
     "Longitude": 8.5167
   },
   {
     "City": "Dijon",
-    "Date": "",
+    "Date": "July 2023",
     "Latitude": 47.322,
     "Longitude": 5.0415
   },
-  {
-    "City": "Bern",
-    "Date": "",
-    "Latitude": 46.948,
-    "Longitude": 7.4481
-  },
+
   {
     "City": "Munich",
-    "Date": "",
+    "Date": "July 2023",
     "Latitude": 48.1351,
     "Longitude": 11.582
   },
   {
     "City": "Berlin",
-    "Date": "",
+    "Date": "July 2023",
     "Latitude": 52.52,
     "Longitude": 13.405
   },
   {
-    "City": "Viena",
-    "Date": "",
+    "City": "Vienna",
+    "Date": "May 2005",
     "Latitude": 48.2082,
     "Longitude": 16.3738
   },
   {
     "City": "Amsterdam",
-    "Date": "",
+    "Date": "Jul 2017",
     "Latitude": 52.3676,
     "Longitude": 4.9041
   },
   {
     "City": "Istambul",
-    "Date": "",
+    "Date": "Jul 2022",
     "Latitude": 41.0086,
     "Longitude": 28.9784
   },
   {
+    "City": "Cape Code",
+    "Date": "July 2013",
+    "Latitude": 41.6688,
+    "Longitude": -70.2962
+  },
+  {
     "City": "Cape Town",
-    "Date": "",
+    "Date": "Feb 2007",
     "Latitude": -33.9249,
     "Longitude": 18.4241
   },
-  {
-    "City": "Mt Killamnajaro",
-    "Date": "",
-    "Latitude": -3.0786,
-    "Longitude": 37.3514
-  },
+
   {
     "City": "Qatar",
-    "Date": "",
+    "Date": "Jul 2022",
     "Latitude": 25.3548,
     "Longitude": 51.1839
   },
   {
     "City": "Seychelles",
-    "Date": "",
+    "Date": "Aug 2005",
     "Latitude": -4.6796,
-    "Longitude": 55.492
+    "Longitude": 55.492,
+    "Notes": "First time living on a sailing boat"
   },
   {
-    "City": "Male (Maldeives)",
-    "Date": "",
+    "City": "Male",
+    "Date": "June 2014",
     "Latitude": 4.175,
     "Longitude": 73.5089
   },
   {
-    "City": "Baros Resort (Maldeives)",
-    "Date": "",
+    "City": "Baros",
+    "Date": "June 2014",
     "Latitude": 4.2833,
     "Longitude": 73.4444
   },
   {
-    "City": "Xi'an China",
-    "Date": "",
+    "City": "Xi'an",
+    "Date": "October 2010",
     "Latitude": 34.3416,
     "Longitude": 108.9397
   },
   {
     "City": "Hangzhou",
-    "Date": "",
+    "Date": "June 2016",
     "Latitude": 30.2471,
     "Longitude": 120.178
   },
+
   {
-    "City": "Yan Tai China",
-    "Date": "",
+    "City": "Yan Tai",
+    "Date": "March 2018",
     "Latitude": 37.507,
     "Longitude": 121.4209
   },
   {
     "City": "Beijing",
-    "Date": "",
+    "Date": "Aug 2008",
     "Latitude": 39.9042,
-    "Longitude": 116.4074
+    "Longitude": 116.4074,
+    "Notes": "The best city in China, feels like paris but chinese."
   },
   {
     "City": "Shanghai",
-    "Date": "",
+    "Date": "Sep 2017",
     "Latitude": 31.2304,
     "Longitude": 121.4737
   },
   {
     "City": "Shenzhen",
-    "Date": "",
+    "Date": "March 2016",
     "Latitude": 22.5431,
     "Longitude": 114.0579
   },
   {
-    "City": "KunMing",
-    "Date": "",
+    "City": "Kun Ming",
+    "Date": "Feb 2010",
     "Latitude": 25.0389,
     "Longitude": 102.7146
   },
   {
     "City": "Chengdu",
-    "Date": "",
+    "Date": "March 2016",
     "Latitude": 30.6799,
     "Longitude": 104.0649
   },
   {
     "City": "Suzhou",
-    "Date": "",
+    "Date": "November 2019",
     "Latitude": 31.3025,
     "Longitude": 120.6136
   },
   {
     "City": "Hong Kong",
-    "Date": "",
+    "Date": "August 2007",
     "Latitude": 22.3193,
-    "Longitude": 114.1694
+    "Longitude": 114.1694,
+    "Notes": "The city where I grew up, and what will always be my favourite city in the world."
+  },
+  {
+    "City": "Gui Lin",
+    "Date": "March 2009",
+    "Latitude": 25.2744,
+    "Longitude": 110.2991
   },
   {
     "City": "Macau",
-    "Date": "",
+    "Date": "March 2008",
     "Latitude": 22.1987,
     "Longitude": 113.5429
   },
-  {
-    "City": "Mt Fuji Japan",
-    "Date": "",
-    "Latitude": 35.3606,
-    "Longitude": 138.7274
-  },
+
   {
     "City": "Koyoto",
-    "Date": "",
+    "Date": "October 2019",
     "Latitude": 35.0116,
     "Longitude": 135.7681
   },
   {
     "City": "Tokyo",
-    "Date": "",
+    "Date": "Sep 2017",
     "Latitude": 35.6762,
     "Longitude": 139.6503
   },
   {
     "City": "Fukuoka",
-    "Date": "",
+    "Date": "October 2019",
     "Latitude": 33.5903,
     "Longitude": 130.4017
   },
   {
     "City": "Taipei",
-    "Date": "",
+    "Date": "Aug 2013",
     "Latitude": 25.0307,
     "Longitude": 121.5654
   },
-  {
-    "City": "Niseko",
-    "Date": "",
-    "Latitude": 42.7929,
-    "Longitude": 140.7409
-  },
+
   {
     "City": "Sapporo",
-    "Date": "",
+    "Date": "Feb 2010",
     "Latitude": 43.0689,
     "Longitude": 141.3545
   },
   {
-    "City": "KaoShiung",
-    "Date": "",
+    "City": "Kao Shiung",
+    "Date": "Aug 2014",
     "Latitude": 22.6361,
     "Longitude": 120.3068
   },
   {
     "City": "Koh Samui",
-    "Date": "",
+    "Date": "May 2023",
     "Latitude": 9.5357,
     "Longitude": 100.0622
   },
+
   {
-    "City": "Puhket",
-    "Date": "",
+    "City": "Phuket",
+    "Date": "October 2009",
     "Latitude": 7.8862,
     "Longitude": 98.3964
   },
   {
     "City": "Bali",
-    "Date": "",
+    "Date": "June 2023",
     "Latitude": -8.3405,
     "Longitude": 115.0919
   },
   {
     "City": "Kuala Lumpur",
-    "Date": "",
+    "Date": "November 2009",
     "Latitude": 3.139,
     "Longitude": 101.6869
   },
   {
     "City": "Singapore",
-    "Date": "",
+    "Date": "January 2013",
     "Latitude": 1.3521,
     "Longitude": 103.8198
   },
   {
     "City": "Melbourne",
-    "Date": "",
+    "Date": "April 2018",
     "Latitude": -37.8136,
     "Longitude": 144.9631
   },
   {
-    "City": "Mt Kosciuszko",
-    "Date": "",
-    "Latitude": -36.4556,
-    "Longitude": 148.2693
+    "City": "Bangkok",
+    "Date": "March 2015",
+    "Latitude": 13.7563,
+    "Longitude": 100.5018,
+    "Notes": "Rugby tournament"
   },
   {
-    "City": "Bangkok",
-    "Date": "",
-    "Latitude": 13.7563,
-    "Longitude": 100.5018
+    "City": "Belfast",
+    "Date": "Aug 2023",
+    "Latitude": 54.5973,
+    "Longitude": -5.9301
   },
   {
     "City": "Brunai",
-    "Date": "",
+    "Date": "October 2016",
     "Latitude": 4.5353,
     "Longitude": 114.7277
   },
-  {
-    "City": "Kota Kinabalu",
-    "Date": "",
-    "Latitude": 5.9784,
-    "Longitude": 116.0853
-  },
+
   {
     "City": "Merzouga",
-    "Date": "2023",
+    "Date": "July 2023",
     "Latitude": 31.0802,
     "Longitude": -4.0134
   },
   {
     "City": "Fez",
-    "Date": "2023",
+    "Date": "July 2023",
     "Latitude": 34.0181,
     "Longitude": -5.0078
   },
   {
     "City": "Errachidia",
-    "Date": "2023",
+    "Date": "July 2023",
     "Latitude": 31.9315,
     "Longitude": -4.4268
   },
   {
     "City": "Chefchaouen",
-    "Date": "2023",
+    "Date": "July 2023",
     "Latitude": 35.1688,
     "Longitude": -5.2687
   },
   {
     "City": "Casablanca",
-    "Date": "2023",
+    "Date": "July 2023",
     "Latitude": 33.5731,
     "Longitude": -7.5898
   }

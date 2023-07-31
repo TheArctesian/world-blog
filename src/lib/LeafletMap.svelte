@@ -2,7 +2,11 @@
   import { onMount, onDestroy } from "svelte";
   import { browser } from "$app/environment";
   import places from "./places.json";
+  import ski from "./ski.json";
+  import hike from "./mountains.json";
+  import hikeMarker from "./hike.png";
   import marker from "./pin.png";
+  import skiMarker from "./ski.png";
 
   let mapElement;
   let map;
@@ -12,10 +16,21 @@
       const leaflet = await import("leaflet");
       let defaultIcon = leaflet.icon({
         iconUrl: marker,
-
         iconSize: [25, 25], // size of the icon
       });
+      let skiIcon = leaflet.icon({
+        iconUrl: skiMarker,
+        iconSize: [25,25]
+      });
+      let hikeIcon = leaflet.icon({
+        iconUrl: hikeMarker,
+        iconSize: [25,25]
+      });
+
+
       map = leaflet.map(mapElement).setView([22.3, 114.16], 4);
+
+
       leaflet
         .tileLayer(
           "https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}",
@@ -33,7 +48,28 @@
       places.forEach((city) => {
         leaflet
           .marker([city.Latitude, city.Longitude], { icon: defaultIcon })
-          .bindPopup("<b>" + city.City + "</b><br>Date Visted " + city.Date)
+          .bindPopup(
+            "<b>" + city.City + "</b><br>Date first visited " + city.Date
+          )
+          .openPopup()
+          .addTo(map);
+      });
+
+      ski.forEach((ski) => {
+        leaflet
+          .marker([ski.Latitude, ski.Longitude], { icon: skiIcon })
+          .bindPopup(
+            "<b>" + ski.City + "</b><br>Date first visited " + ski.Date
+          )
+          .openPopup()
+          .addTo(map);
+      });
+      hike.forEach((hike) => {
+        leaflet
+          .marker([hike.Latitude, hike.Longitude], { icon: hikeIcon })
+          .bindPopup(
+            "<b>" + hike.City + "</b><br>Date first visited " + hike.Date
+          )
           .openPopup()
           .addTo(map);
       });
@@ -58,6 +94,6 @@
   main div {
     height: 98vh;
     width: 98.5vw;
-    margin:auto;
+    margin: auto;
   }
 </style>
