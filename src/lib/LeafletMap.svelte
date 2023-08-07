@@ -5,7 +5,7 @@
   import ski from "./ski.json";
   import hike from "./mountains.json";
   import hikeMarker from "./hike.png";
-  import marker from "./pin.png";
+  import marker from "./city.png";
   import skiMarker from "./ski.png";
 
   let mapElement;
