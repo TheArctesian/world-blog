@@ -7,6 +7,8 @@
   import hikeMarker from "./hike.png";
   import marker from "./city.png";
   import skiMarker from "./ski.png";
+  import lived from "./lived.json";
+  import livedMarker from "./lived.png";
 
   let mapElement;
   let map;
@@ -20,16 +22,18 @@
       });
       let skiIcon = leaflet.icon({
         iconUrl: skiMarker,
-        iconSize: [25,25]
+        iconSize: [25, 25],
       });
       let hikeIcon = leaflet.icon({
         iconUrl: hikeMarker,
-        iconSize: [25,25]
+        iconSize: [25, 25],
+      });
+      let livedIcon = leaflet.icon({
+        iconUrl: livedMarker,
+        iconSize: [25, 25],
       });
 
-
       map = leaflet.map(mapElement).setView([22.3, 114.16], 4);
-
 
       leaflet
         .tileLayer(
@@ -69,6 +73,16 @@
           .marker([hike.Latitude, hike.Longitude], { icon: hikeIcon })
           .bindPopup(
             "<b>" + hike.City + "</b><br>Date first visited " + hike.Date
+          )
+          .openPopup()
+          .addTo(map);
+      });
+
+      lived.forEach((lived) => {
+        leaflet
+          .marker([lived.Latitude, lived.Longitude], { icon: livedIcon })
+          .bindPopup(
+            "<b>" + lived.City + "</b><br>Date first visited " + lived.Date
           )
           .openPopup()
           .addTo(map);

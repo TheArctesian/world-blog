@@ -20,13 +20,6 @@
     "Notes": "My brother and I drove through here when we were traversing California. Was not really memorable enough for me to say anything significant."
   },
   {
-    "City": "Oakland",
-    "Date": 2019,
-    "Latitude": 37.8044,
-    "Longitude": -122.2711,
-    "Notes": "Where I am currently attending university (UC Berkeley), and also where my brother attended. I will have more to write on this place in a while."
-  },
-  {
     "City": "San Francisco",
     "Date": "Feb 2015",
     "Latitude": 37.7749,
@@ -114,7 +107,7 @@
     "Latitude": 44.4759,
     "Longitude": -73.2121
   },
- {
+  {
     "City": "Kingston",
     "Date": "October 2005",
     "Latitude": 17.997,
@@ -139,12 +132,103 @@
     "Latitude": -34.6037,
     "Longitude": -58.3816
   },
- {
+  {
     "City": "Cork",
     "Date": "Feb 2010",
     "Latitude": 51.8985,
     "Longitude": -8.4756,
     "Notes": "While I have been going here all my life the first time we stoped in town was then"
+  },
+  {
+    "City": "Kenmare",
+    "Date": "Aug 2023",
+    "Latitude": 51.8797,
+    "Longitude": -9.5836,
+    "Notes": ""
+  },
+  {
+    "City": "Donegal",
+    "Date": "Aug 2023",
+    "Latitude": 54.6549,
+    "Longitude": -8.1046,
+    "Notes": ""
+  },
+  {
+    "City": "Bushmills",
+    "Date": "Aug 2023",
+    "Latitude": 55.2073,
+    "Longitude": -6.5175,
+    "Notes": ""
+  },
+  {
+    "City": "Derry",
+    "Date": "Aug 2023",
+    "Latitude": 54.9966,
+    "Longitude": -7.3086,
+    "Notes": ""
+  },
+  {
+    "City": "Kinsale",
+    "Date": "Aug 2023",
+    "Latitude": 51.7075,
+    "Longitude": -8.5306,
+    "Notes": ""
+  },
+  {
+    "City": "Clonakilty",
+    "Date": "",
+    "Latitude": 51.6231,
+    "Longitude": -8.8706,
+    "Notes": ""
+  },
+  {
+    "City": "Skibbereen",
+    "Date": "",
+    "Latitude": 51.5559,
+    "Longitude": -9.2621,
+    "Notes": ""
+  },
+  {
+    "City": "Baltimore",
+    "Date": "",
+    "Latitude": 51.4833,
+    "Longitude": -9.3667,
+    "Notes": ""
+  },
+  {
+    "City": "Dursey Island",
+    "Date": "",
+    "Latitude": 51.5967,
+    "Longitude": -10.1964,
+    "Notes": ""
+  },
+  {
+    "City": "Goleen",
+    "Date": "",
+    "Latitude": 51.5,
+    "Longitude": -9.7,
+    "Notes": ""
+  },
+  {
+    "City": "Glengarriff",
+    "Date": "",
+    "Latitude": 51.75,
+    "Longitude": -9.55,
+    "Notes": ""
+  },
+  {
+    "City": "Ballylickey",
+    "Date": "",
+    "Latitude": 51.7333,
+    "Longitude": -9.5167,
+    "Notes": ""
+  },
+  {
+    "City": "Schull",
+    "Date": "",
+    "Latitude": 51.5278,
+    "Longitude": -9.5475,
+    "Notes": ""
   },
   {
     "City": "Bantry",
@@ -171,13 +255,7 @@
     "Latitude": 53.3498,
     "Longitude": -6.2603
   },
-  {
-    "City": "London",
-    "Date": "Sep 2004",
-    "Latitude": 51.5074,
-    "Longitude": -0.1278,
-    "Notes": "My birthplace"
-  },
+
   {
     "City": "Edinburgh",
     "Date": "Aug 2017",
@@ -202,6 +280,13 @@
     "Date": "June 2022",
     "Latitude": 46.2043,
     "Longitude": 6.1432
+  },
+
+  {
+    "City": "Basin Harbor",
+    "Date": "June 2012",
+    "Latitude": 44.1973,
+    "Longitude": -73.3509
   },
   {
     "City": "Barcelona",
@@ -421,13 +506,7 @@
     "Latitude": 31.3025,
     "Longitude": 120.6136
   },
-  {
-    "City": "Hong Kong",
-    "Date": "August 2007",
-    "Latitude": 22.3193,
-    "Longitude": 114.1694,
-    "Notes": "The city where I grew up, and what will always be my favourite city in the world."
-  },
+
   {
     "City": "Gui Lin",
     "Date": "March 2009",

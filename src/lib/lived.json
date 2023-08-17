@@ -1,0 +1,22 @@
+[  {
+    "City": "Berkeley",
+    "Date": 2019,
+    "Latitude": 37.8044,
+    "Longitude": -122.2711,
+    "Notes": "Where I am currently attending university (UC Berkeley), and also where my brother attended. I will have more to write on this place in a while."
+  },
+  {
+    "City": "Hong Kong",
+    "Date": "August 2007",
+    "Latitude": 22.3193,
+    "Longitude": 114.1694,
+    "Notes": "The city where I grew up, and what will always be my favourite city in the world."
+  },
+  {
+    "City": "London",
+    "Date": "Sep 2004",
+    "Latitude": 51.5074,
+    "Longitude": -0.1278,
+    "Notes": "My birthplace"
+  }
+]
