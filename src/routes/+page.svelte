@@ -8,7 +8,7 @@
 <!-- <Popup /> -->
 <div>
   <LeafletMap />
-  <Info></Info>
+  <Info />
 </div>
 
 <style>
