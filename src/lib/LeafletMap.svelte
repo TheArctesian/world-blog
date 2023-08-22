@@ -32,9 +32,9 @@
         iconUrl: livedMarker,
         iconSize: [25, 25],
       });
-      var southWest = L.latLng(-89.98155760646617, -180),
-        northEast = L.latLng(89.99346179538875, 180),
-        bounds = L.latLngBounds(southWest, northEast);
+      var southWest = leaflet.latLng(-89.98155760646617, -180),
+        northEast = leaflet.latLng(89.99346179538875, 180),
+        bounds = leaflet.latLngBounds(southWest, northEast);
 
       map = leaflet.map(mapElement).setView([22.3, 114.16], 4);
 
