@@ -41,15 +41,12 @@
       map.setMaxBounds(bounds);
       leaflet
         .tileLayer(
-          "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-
-          {
-            attribution:
-              'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-            minZoom: 2,
-            maxZoom: 10,
-            ext: "jpg",
-          }
+         'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}', {
+	          minZoom: 2,
+	          maxZoom: 10,
+	          attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	          ext: 'png' 
+         }
         )
         .addTo(map);
 
