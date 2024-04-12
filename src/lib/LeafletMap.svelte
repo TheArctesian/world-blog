@@ -43,7 +43,8 @@
       var OpenStreetMap_Mapnik = L.tileLayer(
         "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
-          maxZoom: 19,
+          minZoom: 2,
+          maxZoom: 16,
           attribution:
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }
