@@ -651,5 +651,54 @@
     "Latitude": 32.7757,
     "Longitude": -117.0719,
     "Notes": "We went to see a friend and Jacob Collier, I think the greatest live performance I will ever see"
+  },
+  {
+    "City": "Porto",
+    "Date": "May 2024",
+    "Latitude": 41.1494,
+    "Longitude": -8.6107,
+    "Notes": "The Start of My Camino"
+  },
+  {
+    "City": "Tui",
+    "Date": "",
+    "Latitude": 42.0797,
+    "Longitude": -8.6444,
+    "Notes": "First rest stop on Camino Proteges"
+  },
+  {
+    "City": "Vigo",
+    "Date": "",
+    "Latitude": 42.2333,
+    "Longitude": -8.7167,
+    "Notes": "Another stop, loved this city"
+  },
+  {
+    "City": "Redondela",
+    "Date": "",
+    "Latitude": 42.2833,
+    "Longitude": -8.6,
+    "Notes": "Arrived here during the Festa da Coca, I think the most fun night of my first camino, apart from maybe Porto"
+  },
+  {
+    "City": "Pontevedra",
+    "Date": "",
+    "Latitude": 42.4333,
+    "Longitude": -8.6333,
+    "Notes": "Massive City fell in love with the Nata store there, thanks Hector for showing me around"
+  },
+  {
+    "City": "Padrón",
+    "Date": "",
+    "Latitude": 42.7333,
+    "Longitude": -8.5333,
+    "Notes": "Last stop loved the food here"
+  },
+  {
+    "City": "Santiago de Compostela",
+    "Date": "",
+    "Latitude": 42.8833,
+    "Longitude": -8.5333,
+    "Notes": "The end an incredible city"
   }
 ]
