@@ -5,7 +5,6 @@
     "Latitude": 41.2372,
     "Longitude": 1.8059
   },
-
   {
     "City": "Vancouver",
     "Date": 2013,
@@ -50,21 +49,18 @@
     "Latitude": 47.6062,
     "Longitude": -122.3321
   },
-
   {
     "City": "Denver",
     "Date": "Jul 2022",
     "Latitude": 39.7392,
     "Longitude": -104.9903
   },
-
   {
     "City": "Dallas",
     "Date": "Feb 2010",
     "Latitude": 32.7767,
     "Longitude": -96.797
   },
-
   {
     "City": "Austin",
     "Date": "Jul 2022",
@@ -256,7 +252,6 @@
     "Latitude": 53.3498,
     "Longitude": -6.2603
   },
-
   {
     "City": "Edinburgh",
     "Date": "Aug 2017",
@@ -275,14 +270,12 @@
     "Latitude": 48.8566,
     "Longitude": 2.3522
   },
-
   {
     "City": "Geneva",
     "Date": "June 2022",
     "Latitude": 46.2043,
     "Longitude": 6.1432
   },
-
   {
     "City": "Basin Harbor",
     "Date": "June 2012",
@@ -314,7 +307,6 @@
     "Longitude": 1.2445,
     "Notes": "We went for the waterpark lots of good memories"
   },
-
   {
     "City": "Bergamo",
     "Date": "July 2022",
@@ -351,7 +343,6 @@
     "Latitude": 46,
     "Longitude": 9.2833
   },
-
   {
     "City": "Zurich",
     "Date": "June 2016",
@@ -382,7 +373,6 @@
     "Latitude": 47.322,
     "Longitude": 5.0415
   },
-
   {
     "City": "Munich",
     "Date": "July 2023",
@@ -425,7 +415,6 @@
     "Latitude": -33.9249,
     "Longitude": 18.4241
   },
-
   {
     "City": "Qatar",
     "Date": "Jul 2022",
@@ -463,7 +452,6 @@
     "Latitude": 30.2471,
     "Longitude": 120.178
   },
-
   {
     "City": "Yan Tai",
     "Date": "March 2018",
@@ -507,7 +495,6 @@
     "Latitude": 31.3025,
     "Longitude": 120.6136
   },
-
   {
     "City": "Gui Lin",
     "Date": "March 2009",
@@ -520,7 +507,6 @@
     "Latitude": 22.1987,
     "Longitude": 113.5429
   },
-
   {
     "City": "Koyoto",
     "Date": "October 2019",
@@ -545,7 +531,6 @@
     "Latitude": 25.0307,
     "Longitude": 121.5654
   },
-
   {
     "City": "Sapporo",
     "Date": "Feb 2010",
@@ -564,7 +549,6 @@
     "Latitude": 9.5357,
     "Longitude": 100.0622
   },
-
   {
     "City": "Phuket",
     "Date": "October 2009",
@@ -614,7 +598,6 @@
     "Latitude": 4.5353,
     "Longitude": 114.7277
   },
-
   {
     "City": "Merzouga",
     "Date": "July 2023",
@@ -661,44 +644,104 @@
   },
   {
     "City": "Tui",
-    "Date": "",
+    "Date": "May 2024",
+    "Latitude": 41.1494,
     "Latitude": 42.0797,
     "Longitude": -8.6444,
     "Notes": "First rest stop on Camino Proteges"
   },
   {
     "City": "Vigo",
-    "Date": "",
+    "Date": "May 2024",
     "Latitude": 42.2333,
     "Longitude": -8.7167,
     "Notes": "Another stop, loved this city"
   },
   {
     "City": "Redondela",
-    "Date": "",
+    "Date": "May 2024",
     "Latitude": 42.2833,
     "Longitude": -8.6,
     "Notes": "Arrived here during the Festa da Coca, I think the most fun night of my first camino, apart from maybe Porto"
   },
-  {
-    "City": "Pontevedra",
-    "Date": "",
-    "Latitude": 42.4333,
-    "Longitude": -8.6333,
-    "Notes": "Massive City fell in love with the Nata store there, thanks Hector for showing me around"
-  },
+
   {
     "City": "Padrón",
-    "Date": "",
+    "Date": "May 2024",
     "Latitude": 42.7333,
     "Longitude": -8.5333,
     "Notes": "Last stop loved the food here"
   },
   {
     "City": "Santiago de Compostela",
-    "Date": "",
+    "Date": "May 2024",
     "Latitude": 42.8833,
     "Longitude": -8.5333,
     "Notes": "The end an incredible city"
+  },
+  {
+    "City": "New Delhi",
+    "Date": "Jan 2025",
+    "Latitude": 28.6139,
+    "Longitude": 77.2090,
+    "Notes": ""
+  },
+  {
+    "City": "Agra",
+    "Date": "Jan 2025",
+    "Latitude": 27.1767,
+    "Longitude": 78.0081,
+    "Notes": "Unfortunately went when it was very smoggy"
+  },
+  {
+    "City": "Dehradun",
+    "Date": "Jan 2025",
+    "Latitude": 30.3165,
+    "Longitude": 78.0322,
+    "Notes": "Loved this place will be back"
+  },
+  {
+    "City": "León",
+    "Date": "",
+    "Latitude": 42.5987,
+    "Longitude": -5.5671,
+    "Notes": ""
+  },
+  {
+    "City": "Astorga",
+    "Date": "",
+    "Latitude": 42.4499,
+    "Longitude": -6.0500,
+    "Notes": ""
+  },
+  {
+    "City": "Ponferrada",
+    "Date": "",
+    "Latitude": 42.5499,
+    "Longitude": -6.5983,
+    "Notes": ""
+  },
+  {
+    "City": "Sarria",
+    "Date": "",
+    "Latitude": 42.7808,
+    "Longitude": -7.4141,
+    "Notes": ""
+  },
+  {
+    "City": "Portomarín",
+    "Date": "",
+    "Latitude": 42.8077,
+    "Longitude": -7.6163,
+    "Notes": ""
+  },
+
+  {
+    "City": "Pontevedra",
+    "Date": "",
+    "Latitude": 42.4333,
+    "Longitude": -8.6333,
+    "Notes": "Massive City fell in love with the Nata store there, thanks Hector for showing me around"
   }
-]
+  
+  ]
