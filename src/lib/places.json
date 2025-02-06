@@ -664,6 +664,7 @@
     "Longitude": -8.6,
     "Notes": "Arrived here during the Festa da Coca, I think the most fun night of my first camino, apart from maybe Porto"
   },
+
   {
     "City": "Padrón",
     "Date": "May 2024",
@@ -734,88 +735,13 @@
     "Longitude": -7.6163,
     "Notes": ""
   },
+
   {
     "City": "Pontevedra",
     "Date": "",
     "Latitude": 42.4333,
     "Longitude": -8.6333,
     "Notes": "Massive City fell in love with the Nata store there, thanks Hector for showing me around"
-  },
-  {
-    "City": "Saint Gervais",
-    "Date": "Aug 12th 2024",
-    "Latitude": 45.8919,
-    "Longitude": 6.7126,
-    "Notes": "Day 1: Briefing at 7:00pm"
-  },
-  {
-    "City": "Les Houches",
-    "Date": "Aug 13th 2024",
-    "Latitude": 45.8912,
-    "Longitude": 6.7983,
-    "Notes": "Day 2: Hike from St Gervais"
-  },
-  {
-    "City": "Argentiere",
-    "Date": "Aug 13th-14th 2024",
-    "Latitude": 45.9829,
-    "Longitude": 6.9227,
-    "Notes": "Day 2-3: Two nights stay, Day 3 hike from Chamonix"
-  },
-  {
-    "City": "Vallorcine",
-    "Date": "Aug 15th 2024",
-    "Latitude": 46.0294,
-    "Longitude": 6.9341,
-    "Notes": "Day 4: Hike from Argentiere"
-  },
-  {
-    "City": "La Forclaz",
-    "Date": "Aug 16th 2024",
-    "Latitude": 46.0569,
-    "Longitude": 7.0012,
-    "Notes": "Day 5: Hike from Vallorcine, Night in Martigny"
-  },
-  {
-    "City": "Champex",
-    "Date": "Aug 17th 2024",
-    "Latitude": 46.0297,
-    "Longitude": 7.1119,
-    "Notes": "Day 6: Hike from La Forclaz"
-  },
-  {
-    "City": "La Fouly",
-    "Date": "Aug 18th 2024",
-    "Latitude": 45.9333,
-    "Longitude": 7.0833,
-    "Notes": "Day 7: Hike from Champex"
-  },
-  {
-    "City": "Courmayeur",
-    "Date": "Aug 19th 2024",
-    "Latitude": 45.7967,
-    "Longitude": 6.9674,
-    "Notes": "Day 8: Hike from La Fouly"
-  },
-  {
-    "City": "Ville des Glaciers",
-    "Date": "Aug 20th 2024",
-    "Latitude": 45.7167,
-    "Longitude": 6.7333,
-    "Notes": "Day 9: Hike from Courmayeur, Night in Bourg Saint Maurice"
-  },
-  {
-    "City": "Les Contamines",
-    "Date": "Aug 21st 2024",
-    "Latitude": 45.8206,
-    "Longitude": 6.7281,
-    "Notes": "Day 10: Final day, hike from Les Chapieux, return to Chamonix"
-  },
-  {
-    "City": "Chamonix",
-    "Date": "Aug 21st 2024",
-    "Latitude": 45.9237,
-    "Longitude": 6.8694,
-    "Notes": "End Tour du Mont-Blanc"
   }
-]
+  
+  ]

@@ -41,5 +41,82 @@
     "Date": "April 2018",
     "Latitude": -36.4556,
     "Longitude": 148.2693
+  },
+  {
+    "City": "Saint Gervais",
+    "Date": "Aug 12th 2024",
+    "Latitude": 45.8919,
+    "Longitude": 6.7126,
+    "Notes": "Tour du Mont-Blanc: Day 1"
+  },
+  {
+    "City": "Les Houches",
+    "Date": "Aug 13th 2024",
+    "Latitude": 45.8912,
+    "Longitude": 6.7983,
+    "Notes": "Tour du Mont-Blanc: Day 2"
+  },
+  {
+    "City": "Argentiere",
+    "Date": "Aug 13th-14th 2024",
+    "Latitude": 45.9829,
+    "Longitude": 6.9227,
+    "Notes": "Tour du Mont-Blanc: Day 3"
+  },
+  {
+    "City": "Vallorcine",
+    "Date": "Aug 15th 2024",
+    "Latitude": 46.0294,
+    "Longitude": 6.9341,
+    "Notes": "Tour du Mont-Blanc: Day 4"
+  },
+  {
+    "City": "La Forclaz",
+    "Date": "Aug 16th 2024",
+    "Latitude": 46.0569,
+    "Longitude": 7.0012,
+    "Notes": "Tour du Mont-Blanc: Day 5"
+  },
+  {
+    "City": "Champex",
+    "Date": "Aug 17th 2024",
+    "Latitude": 46.0297,
+    "Longitude": 7.1119,
+    "Notes": "Tour du Mont-Blanc: Day 6"
+  },
+  {
+    "City": "La Fouly",
+    "Date": "Aug 18th 2024",
+    "Latitude": 45.9333,
+    "Longitude": 7.0833,
+    "Notes": "Tour du Mont-Blanc: Day 7"
+  },
+  {
+    "City": "Courmayeur",
+    "Date": "Aug 19th 2024",
+    "Latitude": 45.7967,
+    "Longitude": 6.9674,
+    "Notes": "Tour du Mont-Blanc: Day 8"
+  },
+  {
+    "City": "Ville des Glaciers",
+    "Date": "Aug 20th 2024",
+    "Latitude": 45.7167,
+    "Longitude": 6.7333,
+    "Notes": "Tour du Mont-Blanc: Day 9"
+  },
+  {
+    "City": "Les Contamines",
+    "Date": "Aug 21st 2024",
+    "Latitude": 45.8206,
+    "Longitude": 6.7281,
+    "Notes": "Tour du Mont-Blanc: Day 10"
+  },
+  {
+    "City": "Chamonix",
+    "Date": "Aug 21st 2024",
+    "Latitude": 45.9237,
+    "Longitude": 6.8694,
+    "Notes": "Tour du Mont-Blanc: Day 11"
   }
 ]
