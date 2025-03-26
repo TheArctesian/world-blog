@@ -754,5 +754,61 @@
     "Latitude": 39.5296,
     "Longitude": -119.8138,
     "Notes": ""
+  },
+  {
+    "City": "Fresno",
+    "Date": "October 2023",
+    "Latitude": 36.7378,
+    "Longitude": -119.7871,
+    "Notes": ""
+  },
+  {
+    "City": "Merced",
+    "Date": "Feb 2024",
+    "Latitude": 37.3022,
+    "Longitude": -120.4829,
+    "Notes": ""
+  },
+  {
+    "City": "Napa",
+    "Date": "April 2022",
+    "Latitude": 38.2975,
+    "Longitude": -122.2869,
+    "Notes": ""
+  },
+  {
+    "City": "Sonoma",
+    "Date": "November 2024",
+    "Latitude": 38.2919,
+    "Longitude": -122.4580,
+    "Notes": ""
+  },
+  {
+    "City": "Bakersfield",
+    "Date": "May 2025",
+    "Latitude": 35.3733,
+    "Longitude": -119.0187,
+    "Notes": ""
+  },
+  {
+    "City": "Santa Barbara",
+    "Date": "May 2025",
+    "Latitude": 34.4208,
+    "Longitude": -119.6982,
+    "Notes": ""
+  },
+  {
+    "City": "Santa Cruz",
+    "Date": "May 2025",
+    "Latitude": 36.9741,
+    "Longitude": -122.0308,
+    "Notes": ""
+  },
+  {
+    "City": "Stockton",
+    "Date": "June 2018",
+    "Latitude": 37.9577,
+    "Longitude": -121.2908,
+    "Notes": ""
   }
 ]

@@ -36,7 +36,7 @@
         northEast = leaflet.latLng(89.99346179538875, 180),
         bounds = leaflet.latLngBounds(southWest, northEast);
 
-      map = leaflet.map(mapElement).setView([22.3, 114.16], 4);
+      map = leaflet.map(mapElement).setView([37.8, -122.27], 8);
 
       map.setMaxBounds(bounds);
       leaflet;
