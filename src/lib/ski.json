@@ -29,7 +29,6 @@
     "Latitude": -41.13,
     "Longitude": -71.3133
   },
-
   {
     "City": "Saas-Fee",
     "Date": "Feb 2005",
@@ -37,7 +36,13 @@
     "Longitude": 7.9277,
     "Notes": "First time in high altitudes, there was a man who passed out in the lift up which scared my mother but I was fine apparently."
   },
-
+  {
+    "City": "Lake Tahoe",
+    "Date": "Aug 2022",
+    "Latitude": 39.0968,
+    "Longitude": -120.0324,
+    "Notes": ""
+  },
   {
     "City": "Deer Valley",
     "Date": "Feb 2015",

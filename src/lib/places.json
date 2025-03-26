@@ -740,5 +740,19 @@
     "Latitude": 42.4333,
     "Longitude": -8.6333,
     "Notes": "Massive City fell in love with the Nata store there, thanks Hector for showing me around"
+  },
+  {
+    "City": "Phoenix",
+    "Date": "March 2025",
+    "Latitude": 33.4484,
+    "Longitude": -112.0740,
+    "Notes": ""
+  },
+  {
+    "City": "Reno",
+    "Date": "Aug 2022",
+    "Latitude": 39.5296,
+    "Longitude": -119.8138,
+    "Notes": ""
   }
 ]
