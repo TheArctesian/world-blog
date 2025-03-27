@@ -23,10 +23,11 @@
           <p>Places I have lived</p>
           <img src={lived} alt="city token" />
         </div>
-        <div class="token">        <div class="token">
-          <p>Places I have skied</p>
-          <img src={ski} alt="city token" />
-        </div>
+        <div class="token">
+          <div class="token">
+            <p>Places I have skied</p>
+            <img src={ski} alt="city token" />
+          </div>
           <p>Places I have been</p>
           <img src={city} alt="city token" />
         </div>
@@ -39,7 +40,11 @@
           <img src={ski} alt="city token" />
         </div>
         <div class="token">
-          <o>Code on <a href="">Github</a></o>
+          <o
+            >Code on <a href="https://github.com/TheArctesian/world-blog"
+              >Github</a
+            ></o
+          >
         </div>
       </div>
     </div>
