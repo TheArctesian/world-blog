@@ -1,3 +1,5 @@
+// @ts-ignore - anime.js import issues
+import { animate, createTimeline as animeTimeline } from 'animejs';
 import type { Map, Icon, Marker } from 'leaflet';
 import type { LocationData, MarkerConfig } from './types.js';
 import type { TimelineEntry } from './timelineAnimation.js';
@@ -43,77 +45,133 @@ export const addAnimatedMarker = (
   icon: Icon,
   zoomLevel: number = 6
 ): void => {
-  // Step 1: Pan to location
-  map.setView([entry.location.Latitude, entry.location.Longitude], zoomLevel, {
-    animate: true,
-    duration: 2.0
-  });
+  // Step 1: Animate pan to location using anime.js for smoother control
+  const currentView = map.getCenter();
+  const currentZoom = map.getZoom();
+  
+  const viewAnimation = {
+    lat: currentView.lat,
+    lng: currentView.lng,
+    zoom: currentZoom
+  };
 
-  // Step 2: Wait for pan to complete, then show marker and label
-  setTimeout(() => {
-    // Create marker
-    const marker = leaflet
-      .marker([entry.location.Latitude, entry.location.Longitude], { 
-        icon,
-        opacity: 1 // Show immediately, no fade
-      })
-      .bindPopup(createPopupContent(entry.location))
-      .addTo(map);
+  // Pan and zoom animation
+  // @ts-ignore
+  animate({
+    targets: viewAnimation,
+    lat: entry.location.Latitude,
+    lng: entry.location.Longitude,
+    zoom: zoomLevel,
+    duration: 2000,
+    easing: 'easeInOutQuad',
+    update: () => {
+      map.setView([viewAnimation.lat, viewAnimation.lng], viewAnimation.zoom, {
+        animate: false // Let anime.js handle the animation
+      });
+    },
+    complete: () => {
+      // Create marker with anime.js fade-in animation
+      const marker = leaflet
+        .marker([entry.location.Latitude, entry.location.Longitude], { 
+          icon,
+          opacity: 0 // Start invisible
+        })
+        .bindPopup(createPopupContent(entry.location))
+        .addTo(map);
 
-    // Create label positioned above marker
-    const placeLabel = leaflet.divIcon({
-      className: 'place-label',
-      html: `<div class="place-name-popup place-label-animate">
-               <div class="place-city">${entry.location.City}</div>
-               <div class="place-date">${entry.location.Date}</div>
-             </div>`,
-      iconSize: [200, 50],
-      iconAnchor: [100, 65] // Position above marker (increased from -15 to 65)
-    });
+      // Animate marker fade-in
+      const markerElement = marker.getElement();
+      if (markerElement) {
+        // @ts-ignore
+        animate({
+          targets: markerElement,
+          opacity: [0, 1],
+          scale: [0.5, 1],
+          duration: 800,
+          easing: 'spring(1, 80, 10, 0)'
+        });
+      }
 
-    const labelMarker = leaflet
-      .marker([entry.location.Latitude, entry.location.Longitude], {
-        icon: placeLabel,
-        opacity: 1,
-        interactive: false
-      })
-      .addTo(map);
+      // Create animated label
+      const placeLabel = leaflet.divIcon({
+        className: 'place-label',
+        html: `<div class="place-name-popup">
+                 <div class="place-city">${entry.location.City}</div>
+                 <div class="place-date">${entry.location.Date}</div>
+               </div>`,
+        iconSize: [200, 50],
+        iconAnchor: [100, 65] // Position above marker
+      });
 
-    // Hide label after 3 seconds with fade out
-    setTimeout(() => {
-      try {
-        // Add fade-out class
-        const labelElement = labelMarker.getElement();
-        if (labelElement) {
-          const popup = labelElement.querySelector('.place-name-popup');
-          if (popup) {
-            popup.classList.add('place-label-fade-out');
-            // Remove after fade animation completes
-            setTimeout(() => {
-              try {
-                map.removeLayer(labelMarker);
-              } catch (error) {
-                // Label might have been removed already
+      const labelMarker = leaflet
+        .marker([entry.location.Latitude, entry.location.Longitude], {
+          icon: placeLabel,
+          opacity: 0,
+          interactive: false
+        })
+        .addTo(map);
+
+      const labelElement = labelMarker.getElement();
+      if (labelElement) {
+        const popup = labelElement.querySelector('.place-name-popup');
+        if (popup) {
+          // Animate label appearance with anime.js
+          // @ts-ignore
+          animeTimeline()
+            .add({
+              targets: popup,
+              opacity: [0, 1],
+              translateY: [-20, 0],
+              scale: [0.8, 1],
+              duration: 600,
+              easing: 'easeOutElastic(1, .5)'
+            })
+            .add({
+              targets: popup,
+              opacity: 1,
+              duration: 2000, // Hold visible
+            })
+            .add({
+              targets: popup,
+              opacity: [1, 0],
+              translateY: [0, -10],
+              scale: [1, 0.9],
+              duration: 400,
+              easing: 'easeInCubic',
+              complete: () => {
+                try {
+                  map.removeLayer(labelMarker);
+                } catch (error) {
+                  // Label might have been removed already
+                }
               }
-            }, 400);
-          }
-        }
-      } catch (error) {
-        // Label might have been removed already
-        try {
-          map.removeLayer(labelMarker);
-        } catch (e) {
-          // Ignore
+            });
         }
       }
-    }, 3000);
-  }, 2500); // Wait for map movement to complete
+    }
+  });
 };
 
 export const clearAllMarkers = (map: Map): void => {
   map.eachLayer((layer: any) => {
     if (layer.options && layer.options.icon) {
-      map.removeLayer(layer);
+      // Animate markers out before removing
+      const element = layer.getElement && layer.getElement();
+      if (element) {
+        // @ts-ignore
+        animate({
+          targets: element,
+          opacity: 0,
+          scale: 0.5,
+          duration: 300,
+          easing: 'easeInQuad',
+          complete: () => {
+            map.removeLayer(layer);
+          }
+        });
+      } else {
+        map.removeLayer(layer);
+      }
     }
   });
 };

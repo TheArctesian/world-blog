@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
+  // @ts-ignore - anime.js import issues
+  import { animate } from 'animejs';
   import type { AnimationState } from './timelineAnimation.js';
   import { formatDateForDisplay } from './dateUtils.js';
   import { generateYearMarkers } from './timelineUtils.js';
@@ -13,6 +15,7 @@
     reset: void;
     speedChange: { speed: number };
     zoomChange: { zoom: number };
+    seek: { index: number };
   }>();
 
   const speedOptions = [
@@ -35,11 +38,63 @@
     ? animationState.timeline[animationState.currentIndex] 
     : null;
 
-  $: progress = animationState.timeline.length > 0 
+  $: progress = animationState.progress || (animationState.timeline.length > 0 
     ? ((animationState.currentIndex + 1) / animationState.timeline.length) * 100 
-    : 0;
+    : 0);
 
   $: yearMarkers = generateYearMarkers(animationState.timeline);
+  
+  let progressBar: HTMLElement;
+  let progressFill: HTMLElement;
+  let isDragging = false;
+  
+  onMount(() => {
+    // Animate progress bar on mount
+    if (progressFill) {
+      // @ts-ignore
+      animate({
+        targets: progressFill,
+        opacity: [0, 1],
+        scaleX: [0, 1],
+        duration: 800,
+        easing: 'easeOutElastic(1, .8)'
+      });
+    }
+  });
+  
+  function handleProgressClick(event: MouseEvent) {
+    if (!progressBar || animationState.timeline.length === 0) return;
+    
+    const rect = progressBar.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const percentage = (clickX / rect.width) * 100;
+    const index = Math.floor((percentage / 100) * animationState.timeline.length);
+    
+    dispatch('seek', { index: Math.max(0, Math.min(index, animationState.timeline.length - 1)) });
+  }
+  
+  function handleProgressDrag(event: MouseEvent) {
+    if (!isDragging || !progressBar || animationState.timeline.length === 0) return;
+    
+    const rect = progressBar.getBoundingClientRect();
+    const dragX = event.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(100, (dragX / rect.width) * 100));
+    const index = Math.floor((percentage / 100) * animationState.timeline.length);
+    
+    dispatch('seek', { index: Math.max(0, Math.min(index, animationState.timeline.length - 1)) });
+  }
+  
+  function startDrag() {
+    isDragging = true;
+    document.addEventListener('mousemove', handleProgressDrag);
+    document.addEventListener('mouseup', stopDrag);
+  }
+  
+  function stopDrag() {
+    isDragging = false;
+    document.removeEventListener('mousemove', handleProgressDrag);
+    document.removeEventListener('mouseup', stopDrag);
+  }
 </script>
 
 <div class="timeline-controls watercolor-bg paper-texture">
@@ -88,8 +143,30 @@
   </div>
 
   <div class="progress-container">
-    <div class="progress-bar">
-      <div class="progress-fill" style="width: {progress}%"></div>
+    <div 
+      class="progress-bar" 
+      bind:this={progressBar}
+      on:click={handleProgressClick}
+      on:mousedown={startDrag}
+      role="slider"
+      aria-label="Timeline progress"
+      aria-valuenow={progress}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      tabindex="0"
+    >
+      <div 
+        class="progress-fill" 
+        bind:this={progressFill}
+        style="width: {progress}%"
+      >
+        <div class="progress-glow"></div>
+      </div>
+      <div 
+        class="progress-handle"
+        style="left: {progress}%"
+        class:dragging={isDragging}
+      ></div>
     </div>
     <div class="progress-text">
       {animationState.currentIndex + 1} / {animationState.timeline.length}
@@ -198,9 +275,15 @@
     background: var(--paper);
     border: 2px solid var(--border-soft);
     border-radius: 8px;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
     box-shadow: inset 2px 2px 4px var(--shadow);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .progress-bar:hover {
+    transform: scaleY(1.2);
   }
 
   .progress-bar::before {
@@ -242,6 +325,53 @@
       radial-gradient(ellipse at 70% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
       linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
     border-radius: 4px;
+  }
+  
+  .progress-glow {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 8px;
+    height: 20px;
+    background: radial-gradient(circle, rgba(135, 206, 235, 0.8) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% { 
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    50% { 
+      opacity: 1;
+      transform: scale(1.5);
+    }
+  }
+  
+  .progress-handle {
+    position: absolute;
+    top: -6px;
+    width: 24px;
+    height: 24px;
+    background: var(--sky-blue);
+    border: 3px solid var(--paper);
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(135, 206, 235, 0.5);
+    transform: translateX(-50%);
+    cursor: grab;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .progress-handle:hover {
+    transform: translateX(-50%) scale(1.2);
+    box-shadow: 0 4px 12px rgba(135, 206, 235, 0.7);
+  }
+  
+  .progress-handle.dragging {
+    cursor: grabbing;
+    transform: translateX(-50%) scale(1.3);
+    box-shadow: 0 6px 16px rgba(135, 206, 235, 0.9);
   }
 
   .progress-text {

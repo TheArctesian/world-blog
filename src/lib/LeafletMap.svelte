@@ -37,7 +37,9 @@
       );
 
       map = leafletInstance.map(mapElement).setView(MAP_CONFIG.center, MAP_CONFIG.zoom);
-      map.setMaxBounds(bounds);
+      if (map) {
+        map.setMaxBounds(bounds);
+      }
 
       leafletInstance.tileLayer(TILE_LAYER.url, TILE_LAYER.options).addTo(map);
 
@@ -138,6 +140,14 @@
     currentZoomLevel = event.detail.zoom;
   };
 
+  const handleSeek = (event: CustomEvent<{ index: number }>): void => {
+    if (!animator || !map) return;
+    
+    // Clear existing markers and seek to position
+    clearAllMarkers(map);
+    animator.seek(event.detail.index);
+  };
+
   // Handle mode switching and marker display
   $: if (map && leafletInstance) {
     if (!animator) {
@@ -198,6 +208,7 @@
       on:reset={handleReset}
       on:speedChange={handleSpeedChange}
       on:zoomChange={handleZoomChange}
+      on:seek={handleSeek}
     />
   {/if}
 </main>
