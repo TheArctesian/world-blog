@@ -1,13 +1,13 @@
 <script>
-    import "../app.css";
+  import "../app.css";
 </script>
-<header>
-</header>
+
+<header></header>
 <slot />
 
 <style>
-    :global(body) {
-        background-color: var(--bg);
-        font-family: "Fira Code", monospace;
-    }
+  :global(body) {
+    background-color: var(--bg);
+    font-family: "Fira Code", monospace;
+  }
 </style>

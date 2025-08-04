@@ -1,21 +1,235 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap');
 
 :root {
-    --bg: #282A36;
-    --fg: #F8F8F2;
-    --white: #ffffff;
-    --black: #000000;
-    --comment: #6272A4;
-    --selection: #44475A;
-    --cyan: #8BE9FD;
-    --green: #50FA7B;
-    --orange: #FFB86C;
-    --pink: #FF79C6;
-    --purple: #BD93F9;
-    --red: #FF5555;
-    --yellow: #F1FA8C;
+    /* Watercolor palette */
+    --paper: #faf8f3;
+    --ink: #2c3e50;
+    --water-blue: #74a9cf;
+    --sky-blue: #87ceeb;
+    --sky-blue-light: #b0e0e6;
+    --sky-blue-pale: #add8e6;
+    --water-teal: #7fb069;
+    --water-coral: #d4a574;
+    --water-lavender: #b19cd9;
+    --water-rose: #e8a598;
+    --shadow: rgba(44, 62, 80, 0.1);
+    --border-soft: rgba(135, 206, 235, 0.3);
 }
 
-.bold{
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Kalam', cursive;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* Hand-drawn watercolor effects */
+.watercolor-bg {
+    background: linear-gradient(
+        135deg,
+        var(--paper) 0%,
+        rgba(116, 169, 207, 0.1) 25%,
+        rgba(127, 176, 105, 0.1) 50%,
+        rgba(212, 165, 116, 0.1) 75%,
+        var(--paper) 100%
+    );
+    position: relative;
+}
+
+.watercolor-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(116, 169, 207, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(127, 176, 105, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 60% 20%, rgba(212, 165, 116, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Handwritten style buttons */
+.hand-drawn-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    font-weight: 600;
+    background: var(--paper);
+    color: var(--ink);
+    border: 2px solid var(--water-blue);
+    border-radius: 12px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    transform: rotate(-1deg);
+    box-shadow: 3px 3px 8px var(--shadow);
+}
+
+.hand-drawn-btn:hover {
+    transform: rotate(0deg) translateY(-2px);
+    background: var(--water-blue);
+    color: var(--paper);
+    box-shadow: 5px 5px 15px var(--shadow);
+}
+
+.hand-drawn-btn:active {
+    transform: rotate(1deg) translateY(0px);
+    box-shadow: 2px 2px 5px var(--shadow);
+}
+
+/* Watercolor paper texture effect */
+.paper-texture {
+    background-image: 
+        radial-gradient(circle at 100% 50%, transparent 20%, rgba(255,255,255,0.3) 21%, rgba(255,255,255,0.3) 34%, transparent 35%, transparent),
+        linear-gradient(0deg, transparent 24%, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.05) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.05) 75%, rgba(255,255,255,0.05) 76%, transparent 77%, transparent);
+    background-size: 50px 50px;
+}
+
+.bold {
     font-weight: bold;
+}
+
+/* Leaflet place name popup styles */
+.place-label {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.place-name-popup {
+    background: var(--paper);
+    border: 2px solid var(--sky-blue);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-family: 'Caveat', cursive;
+    color: var(--ink);
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: 4px 4px 12px var(--shadow);
+    transform: rotate(-2deg);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.place-label-animate {
+    animation: labelSlideIn 0.6s ease-out forwards;
+}
+
+@keyframes labelSlideIn {
+    0% {
+        opacity: 0;
+        transform: rotate(-2deg) translateY(20px) scale(0.8);
+    }
+    60% {
+        opacity: 0.8;
+        transform: rotate(-2deg) translateY(-5px) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(-2deg) translateY(0) scale(1);
+    }
+}
+
+.place-label-fade-out {
+    animation: labelFadeOut 0.4s ease-in forwards;
+}
+
+@keyframes labelFadeOut {
+    0% {
+        opacity: 1;
+        transform: rotate(-2deg) translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(-2deg) translateY(-10px) scale(0.9);
+    }
+}
+
+.place-city {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.place-date {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--water-blue);
+    line-height: 1;
+}
+
+.place-name-popup::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--sky-blue);
+}
+
+.place-name-popup::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-2px);
+    border: 6px solid transparent;
+    border-top-color: var(--paper);
+}
+
+/* Global responsive styles */
+@media (max-width: 768px) {
+    .hand-drawn-btn {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+    
+    .place-name-popup {
+        padding: 8px 12px;
+    }
+    
+    .place-city {
+        font-size: 16px;
+    }
+    
+    .place-date {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hand-drawn-btn {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+    
+    body {
+        font-size: 14px;
+    }
+    
+    .place-name-popup {
+        padding: 6px 10px;
+    }
+    
+    .place-city {
+        font-size: 14px;
+    }
+    
+    .place-date {
+        font-size: 11px;
+    }
 }
