@@ -810,5 +810,117 @@
     "Latitude": 37.9577,
     "Longitude": -121.2908,
     "Notes": ""
+  },
+  {
+    "City": "Primošten",
+    "Date": "August 2025",
+    "Latitude": 43.5859,
+    "Longitude": 15.9252,
+    "Notes": ""
+  },
+  {
+    "City": "Split",
+    "Date": "August 2025",
+    "Latitude": 43.5081,
+    "Longitude": 16.4402,
+    "Notes": ""
+  },
+  {
+    "City": "Maslinica",
+    "Date": "August 2025",
+    "Latitude": 43.4061,
+    "Longitude": 16.2053,
+    "Notes": ""
+  },
+  {
+    "City": "Komiža",
+    "Date": "August 2025",
+    "Latitude": 43.0456,
+    "Longitude": 16.0892,
+    "Notes": ""
+  },
+  {
+    "City": "Hvar",
+    "Date": "August 2025",
+    "Latitude": 43.1724,
+    "Longitude": 16.4412,
+    "Notes": ""
+  },
+  {
+    "City": "Stari Grad",
+    "Date": "August 2025",
+    "Latitude": 43.1839,
+    "Longitude": 16.5916,
+    "Notes": ""
+  },
+  {
+    "City": "Otok Šćedro",
+    "Date": "August 2025",
+    "Latitude": 43.0925,
+    "Longitude": 16.7039,
+    "Notes": ""
+  },
+  {
+    "City": "Korčula",
+    "Date": "August 2025",
+    "Latitude": 42.9604,
+    "Longitude": 17.1359,
+    "Notes": ""
+  },
+  {
+    "City": "Trstenik",
+    "Date": "August 2025",
+    "Latitude": 42.9006,
+    "Longitude": 17.4394,
+    "Notes": ""
+  },
+  {
+    "City": "Polače",
+    "Date": "August 2025",
+    "Latitude": 42.7711,
+    "Longitude": 17.3781,
+    "Notes": ""
+  },
+  {
+    "City": "Sobra",
+    "Date": "August 2025",
+    "Latitude": 42.7444,
+    "Longitude": 17.6003,
+    "Notes": ""
+  },
+  {
+    "City": "Saplunara",
+    "Date": "August 2025",
+    "Latitude": 42.7064,
+    "Longitude": 17.7344,
+    "Notes": ""
+  },
+  {
+    "City": "Dubrovnik",
+    "Date": "August 2025",
+    "Latitude": 42.6507,
+    "Longitude": 18.0944,
+    "Notes": ""
+  },
+  {
+    "City": "Perast",
+    "Date": "August 2025",
+    "Latitude": 42.4864,
+    "Longitude": 18.6983,
+    "Notes": ""
+  },
+  {
+    "City": "Kotor",
+    "Date": "August 2025",
+    "Latitude": 42.4247,
+    "Longitude": 18.7712,
+    "Notes": ""
+  },
+  {
+    "City": "Grandvalira",
+    "Date": "February 2005",
+    "Latitude": 42.5075,
+    "Longitude": 1.5732,
+    "Notes": "Andorra"
   }
 ]
