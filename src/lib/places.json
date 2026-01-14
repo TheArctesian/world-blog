@@ -922,5 +922,19 @@
     "Latitude": 42.5075,
     "Longitude": 1.5732,
     "Notes": "Andorra"
+  },
+  {
+    "City": "Nagano",
+    "Date": "Dec 28 2025",
+    "Latitude": 36.6485,
+    "Longitude": 138.1949,
+    "Notes": ""
+  },
+  {
+    "City": "Myoko",
+    "Date": "Dec 28 2025",
+    "Latitude": 36.8667,
+    "Longitude": 138.2500,
+    "Notes": ""
   }
 ]
