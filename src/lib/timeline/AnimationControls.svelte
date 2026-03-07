@@ -1,12 +1,12 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import type { AnimationState } from './timelineAnimation.js';
+  import type { AnimationState } from './types.js';
   import { formatDateForDisplay } from './dateUtils.js';
-  import { generateYearMarkers } from './timelineUtils.js';
+  import { generateYearMarkers } from './yearMarkers.js';
 
   export let animationState: AnimationState;
   export let isTimelineMode: boolean = false;
-  
+
   const dispatch = createEventDispatcher<{
     play: void;
     pause: void;
@@ -29,14 +29,14 @@
     { label: 'Zoom 10', value: 10 }
   ];
 
-  let currentZoom = 6; // Default zoom level
+  let currentZoom = 6;
 
-  $: currentEntry = animationState.currentIndex >= 0 && animationState.currentIndex < animationState.timeline.length 
-    ? animationState.timeline[animationState.currentIndex] 
+  $: currentEntry = animationState.currentIndex >= 0 && animationState.currentIndex < animationState.timeline.length
+    ? animationState.timeline[animationState.currentIndex]
     : null;
 
-  $: progress = animationState.timeline.length > 0 
-    ? ((animationState.currentIndex + 1) / animationState.timeline.length) * 100 
+  $: progress = animationState.timeline.length > 0
+    ? ((animationState.currentIndex + 1) / animationState.timeline.length) * 100
     : 0;
 
   $: yearMarkers = generateYearMarkers(animationState.timeline);
@@ -44,7 +44,7 @@
 
 <div class="timeline-controls watercolor-bg paper-texture">
   <div class="controls-row">
-    <button 
+    <button
       class="control-btn hand-drawn-btn"
       class:primary={!isTimelineMode}
       on:click={() => animationState.isPlaying ? dispatch('pause') : dispatch('play')}
@@ -52,8 +52,8 @@
     >
       {animationState.isPlaying ? 'Pause' : (isTimelineMode ? 'Play' : 'Start Timeline')}
     </button>
-    
-    <button 
+
+    <button
       class="control-btn hand-drawn-btn"
       on:click={() => dispatch('reset')}
       aria-label="Reset animation"
@@ -61,7 +61,7 @@
       Reset
     </button>
 
-    <select 
+    <select
       class="speed-select hand-drawn-btn"
       value={animationState.speed}
       on:change={(e) => dispatch('speedChange', { speed: parseInt(e.currentTarget.value) })}
@@ -72,7 +72,7 @@
       {/each}
     </select>
 
-    <select 
+    <select
       class="zoom-select hand-drawn-btn"
       value={currentZoom}
       on:change={(e) => {
@@ -99,8 +99,8 @@
   <!-- Year timeline -->
   <div class="year-timeline">
     {#each yearMarkers as marker}
-      <div 
-        class="year-marker" 
+      <div
+        class="year-marker"
         style="left: {marker.position}%"
         class:current={currentEntry && currentEntry.date.getFullYear() === marker.year}
       >
@@ -115,8 +115,8 @@
       <span class="location-name">{currentEntry.location.City}</span>
       <span class="location-date">{formatDateForDisplay(currentEntry.date)}</span>
       <span class="location-type type-{currentEntry.type}">
-        {currentEntry.type === 'city' ? 'City' : 
-         currentEntry.type === 'ski' ? 'Ski' : 
+        {currentEntry.type === 'city' ? 'City' :
+         currentEntry.type === 'ski' ? 'Ski' :
          currentEntry.type === 'hike' ? 'Hike' : 'Lived'}
       </span>
     </div>
@@ -210,7 +210,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
+    background:
       radial-gradient(circle at 20% 20%, rgba(135, 206, 235, 0.1) 0%, transparent 50%),
       radial-gradient(circle at 80% 80%, rgba(176, 224, 230, 0.1) 0%, transparent 50%);
     pointer-events: none;
@@ -237,7 +237,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
+    background:
       radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 60%),
       radial-gradient(ellipse at 70% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
       linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
@@ -286,7 +286,6 @@
     transform: rotate(-2deg);
   }
 
-  /* Year timeline */
   .year-timeline {
     position: relative;
     height: 40px;
@@ -355,7 +354,6 @@
     50% { background: rgba(135, 206, 235, 0.2); }
   }
 
-  /* Responsive design */
   @media (max-width: 768px) {
     .timeline-controls {
       padding: 12px;

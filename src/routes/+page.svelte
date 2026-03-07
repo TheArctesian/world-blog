@@ -1,6 +1,5 @@
 <script>
-  import LeafletMap from "$lib/LeafletMap.svelte";
-  import Popup from "$lib/Popup.svelte";
+  import LeafletMap from "$lib/map/LeafletMap.svelte";
   import Info from "$lib/info.svelte";
   import "../app.css";
 
@@ -11,7 +10,6 @@
   };
 </script>
 
-<!-- <Popup /> -->
 <div class="watercolor-bg paper-texture">
   <div class="top-controls">
     <button class="mode-toggle hand-drawn-btn" on:click={toggleAnimationMode}>
@@ -21,7 +19,7 @@
       <Info />
     </div>
   </div>
-  
+
   <LeafletMap {animationMode} on:switchToTimeline={() => animationMode = true} />
 </div>
 
@@ -43,8 +41,7 @@
   .info-container {
     position: relative;
   }
-  
-  /* Responsive design */
+
   @media (max-width: 768px) {
     .top-controls {
       top: 10px;

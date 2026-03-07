@@ -2,20 +2,24 @@
   import { onMount, onDestroy, createEventDispatcher } from 'svelte';
   import { browser } from '$app/environment';
   import type { Map } from 'leaflet';
-  import type { LocationData } from './types.js';
+  import type { LocationData } from '../marker/types.js';
   import { MAP_CONFIG, TILE_LAYER } from './mapConfig.js';
-  import { MARKER_CONFIGS, createIcon, addMarkersToMap, addAnimatedMarker, clearAllMarkers } from './markerUtils.js';
-  import { TimelineAnimator, createTimeline, type TimelineEntry, type AnimationState } from './timelineAnimation.js';
-  import AnimationControls from './AnimationControls.svelte';
-  
+  import { MARKER_CONFIGS, createIcon } from '../marker/markerConfig.js';
+  import { addMarkersToMap, clearAllMarkers } from '../marker/staticMarkers.js';
+  import { addAnimatedMarker } from '../marker/animatedMarker.js';
+  import { createTimeline } from '../timeline/timelineBuilder.js';
+  import { TimelineAnimator } from '../timeline/animator.js';
+  import type { TimelineEntry, AnimationState } from '../timeline/types.js';
+  import AnimationControls from '../timeline/AnimationControls.svelte';
+
+  import places from '../data/places.json';
+  import ski from '../data/ski.json';
+  import hike from '../data/mountains.json';
+  import lived from '../data/lived.json';
+
   const dispatch = createEventDispatcher<{
     switchToTimeline: void;
   }>();
-  
-  import places from './places.json';
-  import ski from './ski.json';
-  import hike from './mountains.json';
-  import lived from './lived.json';
 
   export let animationMode = false;
 
@@ -26,18 +30,19 @@
   let animationState: AnimationState;
   let icons: Record<string, any> = {};
   let currentZoomLevel = 6;
+  let modeSwitching = false;
 
   const initializeMap = async (): Promise<void> => {
     try {
       leafletInstance = await import('leaflet');
-      
+
       const bounds = leafletInstance.latLngBounds(
         leafletInstance.latLng(...MAP_CONFIG.bounds.southWest),
         leafletInstance.latLng(...MAP_CONFIG.bounds.northEast)
       );
 
       map = leafletInstance.map(mapElement).setView(MAP_CONFIG.center, MAP_CONFIG.zoom);
-      map.setMaxBounds(bounds);
+      map!.setMaxBounds(bounds);
 
       leafletInstance.tileLayer(TILE_LAYER.url, TILE_LAYER.options).addTo(map);
 
@@ -48,14 +53,11 @@
         lived: createIcon(leafletInstance, MARKER_CONFIGS.lived)
       };
 
-      // Initialize animation system first
       initializeAnimation();
-      
-      // Then handle initial display based on mode
+
       if (!animationMode) {
         addAllMarkersStatic();
       }
-      // Animation mode starts with clean map (no markers)
     } catch (error) {
       console.error('Failed to initialize map:', error);
     }
@@ -63,7 +65,7 @@
 
   const addAllMarkersStatic = (): void => {
     if (!map || !leafletInstance) return;
-    
+
     addMarkersToMap(leafletInstance, map, places as LocationData[], icons.city);
     addMarkersToMap(leafletInstance, map, ski as LocationData[], icons.ski);
     addMarkersToMap(leafletInstance, map, hike as LocationData[], icons.hike);
@@ -95,20 +97,18 @@
   };
 
   const handlePlay = (): void => {
-    // Auto-switch to timeline mode when play is pressed
     if (!animationMode) {
       dispatch('switchToTimeline');
-      // Use setTimeout to ensure mode switch completes before starting animation
-      setTimeout(() => {
+      // Use tick-based delay for mode switch to complete
+      requestAnimationFrame(() => {
         startAnimation();
-      }, 150);
+      });
     } else {
       startAnimation();
     }
   };
 
   const startAnimation = (): void => {
-    // Only clear markers if not already cleared by mode switch
     if (map && !animationMode) {
       clearAllMarkers(map);
     }
@@ -122,7 +122,6 @@
   const handleReset = (): void => {
     if (map) {
       clearAllMarkers(map);
-      // In static mode, re-add all markers after reset
       if (!animationMode) {
         addAllMarkersStatic();
       }
@@ -138,32 +137,26 @@
     currentZoomLevel = event.detail.zoom;
   };
 
-  // Handle mode switching and marker display
-  $: if (map && leafletInstance) {
+  $: if (map && leafletInstance && !modeSwitching) {
     if (!animator) {
       initializeAnimation();
     }
-    
+
     if (animationMode) {
-      // Animation mode: clear markers only if not already playing
       if (!animationState?.isPlaying) {
         clearAllMarkers(map);
         if (animator) {
-          animator.reset(); // Reset to clean state
+          animator.reset();
         }
       }
     } else {
-      // Static mode: clear and show all markers
+      modeSwitching = true;
       clearAllMarkers(map);
       if (animator) {
-        animator.pause(); // Pause any running animation
+        animator.pause();
       }
-      // Add small delay to prevent flicker when switching from animation
-      setTimeout(() => {
-        if (!animationMode && map) {
-          addAllMarkersStatic();
-        }
-      }, 50);
+      addAllMarkersStatic();
+      modeSwitching = false;
     }
   }
 
@@ -178,7 +171,6 @@
       animator.destroy();
     }
     if (map) {
-      console.log('Unloading Leaflet map.');
       map.remove();
       map = null;
     }
@@ -187,10 +179,9 @@
 
 <main>
   <div bind:this={mapElement} />
-  
-  <!-- Always show timeline controls -->
+
   {#if animationState}
-    <AnimationControls 
+    <AnimationControls
       {animationState}
       isTimelineMode={animationMode}
       on:play={handlePlay}
@@ -204,20 +195,19 @@
 
 <style>
   @import 'leaflet/dist/leaflet.css';
-  
+
   main {
     position: relative;
     width: 100%;
     height: 100vh;
   }
-  
+
   main div {
     height: calc(100vh - 140px);
     width: 100vw;
     margin: 0;
   }
 
-  /* Responsive design */
   @media (max-width: 768px) {
     main div {
       height: calc(100vh - 160px);

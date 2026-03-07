@@ -1,42 +1,4 @@
-import type { LocationData } from './types.js';
-import { parseDate } from './dateUtils.js';
-
-export interface TimelineEntry {
-  location: LocationData;
-  date: Date;
-  type: 'city' | 'ski' | 'hike' | 'lived';
-}
-
-export interface AnimationState {
-  isPlaying: boolean;
-  currentIndex: number;
-  speed: number; // milliseconds between each marker
-  timeline: TimelineEntry[];
-}
-
-export const createTimeline = (
-  places: LocationData[],
-  ski: LocationData[],
-  hike: LocationData[],
-  lived: LocationData[]
-): TimelineEntry[] => {
-  const timeline: TimelineEntry[] = [
-    ...places.map(location => ({ location, date: parseDate(location.Date), type: 'city' as const })),
-    ...ski.map(location => ({ location, date: parseDate(location.Date), type: 'ski' as const })),
-    ...hike.map(location => ({ location, date: parseDate(location.Date), type: 'hike' as const })),
-    ...lived.map(location => ({ location, date: parseDate(location.Date), type: 'lived' as const }))
-  ];
-
-  // Sort by date
-  return timeline.sort((a, b) => a.date.getTime() - b.date.getTime());
-};
-
-export const createAnimationState = (timeline: TimelineEntry[]): AnimationState => ({
-  isPlaying: false,
-  currentIndex: -1,
-  speed: 4000, // 4 seconds between markers for better tile loading
-  timeline
-});
+import type { TimelineEntry, AnimationState } from './types.js';
 
 export class TimelineAnimator {
   private state: AnimationState;
@@ -49,14 +11,19 @@ export class TimelineAnimator {
     onUpdate: (state: AnimationState) => void,
     onMarkerAdd: (entry: TimelineEntry) => void
   ) {
-    this.state = createAnimationState(timeline);
+    this.state = {
+      isPlaying: false,
+      currentIndex: -1,
+      speed: 4000,
+      timeline
+    };
     this.onUpdate = onUpdate;
     this.onMarkerAdd = onMarkerAdd;
   }
 
   play(): void {
     if (this.state.isPlaying) return;
-    
+
     this.state.isPlaying = true;
     this.onUpdate(this.state);
     this.scheduleNext();
@@ -64,21 +31,19 @@ export class TimelineAnimator {
 
   private scheduleNext(): void {
     if (!this.state.isPlaying) return;
-    
+
     this.state.currentIndex++;
-    
+
     if (this.state.currentIndex >= this.state.timeline.length) {
       this.pause();
       return;
     }
 
     const currentEntry = this.state.timeline[this.state.currentIndex];
-    
-    // Add marker immediately
+
     this.onMarkerAdd(currentEntry);
     this.onUpdate(this.state);
 
-    // Schedule next marker based on speed
     this.timeoutId = window.setTimeout(() => {
       this.scheduleNext();
     }, this.state.speed);
@@ -101,7 +66,6 @@ export class TimelineAnimator {
 
   setSpeed(speed: number): void {
     this.state.speed = speed;
-    // If playing, restart timing with new speed
     if (this.state.isPlaying) {
       if (this.timeoutId !== null) {
         clearTimeout(this.timeoutId);
