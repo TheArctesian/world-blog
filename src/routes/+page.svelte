@@ -1,5 +1,5 @@
 <script>
-  import LeafletMap from "$lib/map/LeafletMap.svelte";
+  import LeafletMap from "$lib/globe/GlobeMap.svelte";
   import Info from "$lib/info.svelte";
   import "../app.css";
 

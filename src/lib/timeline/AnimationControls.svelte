@@ -12,7 +12,6 @@
     pause: void;
     reset: void;
     speedChange: { speed: number };
-    zoomChange: { zoom: number };
   }>();
 
   const speedOptions = [
@@ -21,15 +20,6 @@
     { label: '2x', value: 2000 },
     { label: '4x', value: 1000 }
   ];
-
-  const zoomOptions = [
-    { label: 'Zoom 4', value: 4 },
-    { label: 'Zoom 6', value: 6 },
-    { label: 'Zoom 8', value: 8 },
-    { label: 'Zoom 10', value: 10 }
-  ];
-
-  let currentZoom = 6;
 
   $: currentEntry = animationState.currentIndex >= 0 && animationState.currentIndex < animationState.timeline.length
     ? animationState.timeline[animationState.currentIndex]
@@ -40,91 +30,99 @@
     : 0;
 
   $: yearMarkers = generateYearMarkers(animationState.timeline);
+
+  // Filter year labels to prevent overlap - skip labels that are too close in % position
+  $: visibleYearMarkers = (() => {
+    if (yearMarkers.length === 0) return [];
+    const minGap = 6; // minimum % gap between labels
+    const result = [yearMarkers[0]];
+    for (let i = 1; i < yearMarkers.length; i++) {
+      if (yearMarkers[i].position - result[result.length - 1].position >= minGap) {
+        result.push(yearMarkers[i]);
+      }
+    }
+    return result;
+  })();
 </script>
 
-<div class="timeline-controls watercolor-bg paper-texture">
-  <div class="controls-row">
-    <button
-      class="control-btn hand-drawn-btn"
-      class:primary={!isTimelineMode}
-      on:click={() => animationState.isPlaying ? dispatch('pause') : dispatch('play')}
-      aria-label={animationState.isPlaying ? 'Pause animation' : (isTimelineMode ? 'Play animation' : 'Start timeline animation')}
-    >
-      {animationState.isPlaying ? 'Pause' : (isTimelineMode ? 'Play' : 'Start Timeline')}
-    </button>
-
-    <button
-      class="control-btn hand-drawn-btn"
-      on:click={() => dispatch('reset')}
-      aria-label="Reset animation"
-    >
-      Reset
-    </button>
-
-    <select
-      class="speed-select hand-drawn-btn"
-      value={animationState.speed}
-      on:change={(e) => dispatch('speedChange', { speed: parseInt(e.currentTarget.value) })}
-      aria-label="Animation speed"
-    >
-      {#each speedOptions as option}
-        <option value={option.value}>{option.label}</option>
+<div class="timeline-controls">
+  <!-- Combined progress + year timeline -->
+  <div class="timeline-bar">
+    <div class="track">
+      <div class="track-fill" style="width: {progress}%"></div>
+      <!-- Event ticks on the track -->
+      {#each yearMarkers as marker}
+        <div
+          class="tick"
+          class:active={currentEntry && currentEntry.date.getFullYear() === marker.year}
+          style="left: {marker.position}%"
+        ></div>
       {/each}
-    </select>
-
-    <select
-      class="zoom-select hand-drawn-btn"
-      value={currentZoom}
-      on:change={(e) => {
-        currentZoom = parseInt(e.currentTarget.value);
-        dispatch('zoomChange', { zoom: currentZoom });
-      }}
-      aria-label="Animation zoom level"
-    >
-      {#each zoomOptions as option}
-        <option value={option.value}>{option.label}</option>
-      {/each}
-    </select>
-  </div>
-
-  <div class="progress-container">
-    <div class="progress-bar">
-      <div class="progress-fill" style="width: {progress}%"></div>
     </div>
-    <div class="progress-text">
-      {animationState.currentIndex + 1} / {animationState.timeline.length}
+    <!-- Year labels below the track -->
+    <div class="year-labels">
+      {#each visibleYearMarkers as marker}
+        <span
+          class="year-label"
+          class:active={currentEntry && currentEntry.date.getFullYear() === marker.year}
+          style="left: {marker.position}%"
+        >{marker.year}</span>
+      {/each}
     </div>
   </div>
 
-  <!-- Year timeline -->
-  <div class="year-timeline">
-    {#each yearMarkers as marker}
-      <div
-        class="year-marker"
-        style="left: {marker.position}%"
-        class:current={currentEntry && currentEntry.date.getFullYear() === marker.year}
+  <!-- Bottom row: location info + controls -->
+  <div class="bottom-row">
+    <div class="location-info">
+      {#if currentEntry}
+        <span class="location-name">{currentEntry.location.City}</span>
+        <span class="location-date">{formatDateForDisplay(currentEntry.date)}</span>
+        <span class="location-type type-{currentEntry.type}">
+          {currentEntry.type === 'city' ? 'City' :
+           currentEntry.type === 'ski' ? 'Ski' :
+           currentEntry.type === 'hike' ? 'Hike' : 'Lived'}
+        </span>
+      {:else if !isTimelineMode && !animationState.isPlaying}
+        <span class="helper-text">Press play to watch the journey unfold</span>
+      {/if}
+    </div>
+
+    <div class="controls">
+      <button
+        class="ctrl-btn"
+        class:primary={!isTimelineMode}
+        on:click={() => animationState.isPlaying ? dispatch('pause') : dispatch('play')}
+        aria-label={animationState.isPlaying ? 'Pause' : 'Play'}
       >
-        <div class="year-tick"></div>
-        <div class="year-label">{marker.year}</div>
-      </div>
-    {/each}
-  </div>
+        {#if animationState.isPlaying}
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        {:else}
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        {/if}
+      </button>
 
-  {#if currentEntry}
-    <div class="current-location">
-      <span class="location-name">{currentEntry.location.City}</span>
-      <span class="location-date">{formatDateForDisplay(currentEntry.date)}</span>
-      <span class="location-type type-{currentEntry.type}">
-        {currentEntry.type === 'city' ? 'City' :
-         currentEntry.type === 'ski' ? 'Ski' :
-         currentEntry.type === 'hike' ? 'Hike' : 'Lived'}
-      </span>
+      <button
+        class="ctrl-btn"
+        on:click={() => dispatch('reset')}
+        aria-label="Reset"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+      </button>
+
+      <select
+        class="speed-select"
+        value={animationState.speed}
+        on:change={(e) => dispatch('speedChange', { speed: parseInt(e.currentTarget.value) })}
+        aria-label="Speed"
+      >
+        {#each speedOptions as option}
+          <option value={option.value}>{option.label}</option>
+        {/each}
+      </select>
+
+      <span class="counter">{animationState.currentIndex + 1}/{animationState.timeline.length}</span>
     </div>
-  {:else if !isTimelineMode && !animationState.isPlaying}
-    <div class="helper-text">
-      Click "Start Timeline" to watch my journey unfold chronologically!
-    </div>
-  {/if}
+  </div>
 </div>
 
 <style>
@@ -133,134 +131,92 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--paper);
-    border-top: 3px solid var(--border-soft);
-    padding: 16px;
-    box-shadow: 0 -4px 20px var(--shadow);
+    background: rgba(250, 248, 243, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(135, 206, 235, 0.25);
+    padding: 8px 20px 10px;
     z-index: 1000;
-    transform: rotate(-0.5deg);
-    transform-origin: bottom center;
   }
 
-  .controls-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-  }
-
-  .control-btn {
-    min-width: 80px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .control-btn.primary {
-    background: var(--sky-blue);
-    color: var(--paper);
-    border-color: var(--sky-blue);
-    box-shadow: 0 4px 12px rgba(135, 206, 235, 0.3);
-    animation: gentle-pulse 2s ease-in-out infinite;
-  }
-
-  .control-btn.primary:hover {
-    background: var(--sky-blue-light);
-    border-color: var(--sky-blue-light);
-    transform: rotate(0deg) translateY(-3px);
-  }
-
-  @keyframes gentle-pulse {
-    0%, 100% { transform: rotate(-1deg) scale(1); }
-    50% { transform: rotate(-1deg) scale(1.05); }
-  }
-
-  .speed-select, .zoom-select {
-    padding: 8px 12px;
-    cursor: pointer;
-    min-width: 80px;
-    height: 40px;
-  }
-
-  .progress-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-
-  .progress-bar {
-    flex: 1;
-    height: 12px;
-    background: var(--paper);
-    border: 2px solid var(--border-soft);
-    border-radius: 8px;
-    overflow: hidden;
+  /* --- Track --- */
+  .timeline-bar {
     position: relative;
-    box-shadow: inset 2px 2px 4px var(--shadow);
+    margin-bottom: 6px;
   }
 
-  .progress-bar::before {
-    content: '';
+  .track {
+    position: relative;
+    height: 6px;
+    background: rgba(135, 206, 235, 0.15);
+    border-radius: 3px;
+    overflow: visible;
+  }
+
+  .track-fill {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-      radial-gradient(circle at 20% 20%, rgba(135, 206, 235, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(176, 224, 230, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-  }
-
-  .progress-fill {
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      var(--sky-blue) 0%,
-      var(--sky-blue-light) 30%,
-      var(--sky-blue-pale) 60%,
-      var(--sky-blue) 100%
-    );
-    position: relative;
-    transition: width 0.6s ease;
-    border-radius: 4px;
+    background: linear-gradient(90deg, var(--sky-blue), var(--water-blue));
+    border-radius: 3px;
+    transition: width 0.5s ease;
   }
 
-  .progress-fill::before {
-    content: '';
+  .tick {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-      radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 60%),
-      radial-gradient(ellipse at 70% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
-      linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-    border-radius: 4px;
+    top: -2px;
+    width: 2px;
+    height: 10px;
+    background: rgba(44, 62, 80, 0.18);
+    border-radius: 1px;
+    transform: translateX(-50%);
+    transition: background 0.3s;
   }
 
-  .progress-text {
-    font-size: 12px;
-    color: #666;
-    min-width: 60px;
-    text-align: right;
+  .tick.active {
+    background: var(--sky-blue);
+    box-shadow: 0 0 4px rgba(135, 206, 235, 0.6);
   }
 
-  .current-location {
+  /* --- Year labels --- */
+  .year-labels {
+    position: relative;
+    height: 16px;
+    margin-top: 2px;
+  }
+
+  .year-label {
+    position: absolute;
+    transform: translateX(-50%);
+    font-family: 'Caveat', cursive;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(44, 62, 80, 0.4);
+    white-space: nowrap;
+    transition: color 0.3s;
+  }
+
+  .year-label.active {
+    color: var(--water-blue);
+    font-weight: 700;
+  }
+
+  /* --- Bottom row --- */
+  .bottom-row {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 12px;
-    padding: 8px 16px;
-    background: rgba(116, 169, 207, 0.1);
-    border-radius: 12px;
-    border: 2px dashed var(--border-soft);
-    transform: rotate(0.5deg);
+  }
+
+  .location-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 28px;
+    flex: 1;
+    min-width: 0;
   }
 
   .location-name {
@@ -268,182 +224,153 @@
     font-weight: 700;
     font-size: 18px;
     color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .location-date {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--water-blue);
     font-weight: 500;
+    white-space: nowrap;
   }
 
   .location-type {
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 600;
-    padding: 4px 8px;
-    border-radius: 8px;
+    padding: 2px 8px;
+    border-radius: 10px;
     background: var(--water-teal);
-    color: var(--paper);
-    transform: rotate(-2deg);
-  }
-
-  .year-timeline {
-    position: relative;
-    height: 40px;
-    margin-top: 8px;
-    border-top: 1px dashed var(--border-soft);
-  }
-
-  .year-marker {
-    position: absolute;
-    top: 0;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .year-tick {
-    width: 2px;
-    height: 12px;
-    background: var(--border-soft);
-    border-radius: 1px;
-    margin-bottom: 4px;
-    transition: all 0.3s ease;
-  }
-
-  .year-marker.current .year-tick {
-    background: var(--sky-blue);
-    height: 16px;
-    width: 3px;
-    box-shadow: 0 0 6px rgba(135, 206, 235, 0.5);
-  }
-
-  .year-label {
-    font-family: 'Caveat', cursive;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ink);
-    transform: rotate(-1deg);
+    color: white;
     white-space: nowrap;
-    transition: all 0.3s ease;
-  }
-
-  .year-marker.current .year-label {
-    color: var(--sky-blue);
-    font-size: 14px;
-    font-weight: 700;
-    transform: rotate(0deg);
+    letter-spacing: 0.3px;
   }
 
   .helper-text {
-    text-align: center;
-    padding: 12px 16px;
-    background: rgba(135, 206, 235, 0.1);
-    border-radius: 12px;
-    border: 2px dashed var(--border-soft);
     font-family: 'Caveat', cursive;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 15px;
+    color: rgba(44, 62, 80, 0.5);
+  }
+
+  /* --- Controls --- */
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .ctrl-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(135, 206, 235, 0.4);
+    border-radius: 8px;
+    background: transparent;
     color: var(--ink);
-    transform: rotate(0.5deg);
-    animation: gentle-glow 3s ease-in-out infinite;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0;
+    font-family: 'Kalam', cursive;
   }
 
-  @keyframes gentle-glow {
-    0%, 100% { background: rgba(135, 206, 235, 0.1); }
-    50% { background: rgba(135, 206, 235, 0.2); }
+  .ctrl-btn:hover {
+    background: rgba(135, 206, 235, 0.12);
+    border-color: var(--sky-blue);
   }
 
+  .ctrl-btn.primary {
+    background: var(--sky-blue);
+    color: white;
+    border-color: var(--sky-blue);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+
+  .ctrl-btn.primary:hover {
+    background: var(--water-blue);
+    border-color: var(--water-blue);
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(135, 206, 235, 0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(135, 206, 235, 0); }
+  }
+
+  .speed-select {
+    height: 32px;
+    padding: 0 8px;
+    border: 1.5px solid rgba(135, 206, 235, 0.4);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ink);
+    font-family: 'Kalam', cursive;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+    padding-right: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%232c3e50' opacity='0.4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+  }
+
+  .speed-select:hover {
+    border-color: var(--sky-blue);
+  }
+
+  .counter {
+    font-size: 11px;
+    color: rgba(44, 62, 80, 0.4);
+    font-variant-numeric: tabular-nums;
+    min-width: 48px;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  /* --- Mobile --- */
   @media (max-width: 768px) {
     .timeline-controls {
-      padding: 12px;
-      transform: none;
-    }
-
-    .controls-row {
-      gap: 12px;
-    }
-
-    .control-btn {
-      min-width: 60px;
-      height: 36px;
-      font-size: 14px;
-    }
-
-    .speed-select, .zoom-select {
-      min-width: 60px;
-      height: 36px;
-      font-size: 14px;
-    }
-
-    .current-location {
-      flex-direction: column;
-      gap: 8px;
-      text-align: center;
-    }
-
-    .year-timeline {
-      height: 35px;
-    }
-
-    .year-label {
-      font-size: 10px;
-    }
-
-    .year-marker.current .year-label {
-      font-size: 12px;
-    }
-
-    .helper-text {
-      font-size: 14px;
-      padding: 10px 12px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .timeline-controls {
-      padding: 8px;
-    }
-
-    .controls-row {
-      gap: 8px;
-    }
-
-    .control-btn {
-      min-width: 50px;
-      height: 32px;
-      font-size: 12px;
-    }
-
-    .speed-select, .zoom-select {
-      min-width: 50px;
-      height: 32px;
-      font-size: 12px;
+      padding: 6px 12px 8px;
     }
 
     .location-name {
       font-size: 16px;
     }
 
-    .location-date {
-      font-size: 12px;
-    }
-
-    .year-timeline {
-      height: 30px;
-    }
-
     .year-label {
-      font-size: 9px;
+      font-size: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .timeline-controls {
+      padding: 6px 8px 8px;
     }
 
-    .year-marker.current .year-label {
-      font-size: 11px;
+    .bottom-row {
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .helper-text {
-      font-size: 12px;
-      padding: 8px 10px;
+    .location-info {
+      justify-content: center;
+    }
+
+    .controls {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .location-name {
+      font-size: 15px;
+    }
+
+    .counter {
+      display: none;
     }
   }
 </style>
