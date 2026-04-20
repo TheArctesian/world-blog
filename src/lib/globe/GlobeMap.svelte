@@ -3,10 +3,13 @@
   import { browser } from '$app/environment';
   import type { LocationData } from '../marker/types.js';
   import { MARKER_CONFIGS } from '../marker/markerConfig.js';
-  import { createTimeline } from '../timeline/timelineBuilder.js';
-  import { TimelineAnimator } from '../timeline/animator.js';
-  import type { TimelineEntry, AnimationState } from '../timeline/types.js';
-  import AnimationControls from '../timeline/AnimationControls.svelte';
+  import type { TimelineEntry } from '../timeline/types.js';
+  import type { TimelineAnimator } from '../timeline/animator.js';
+  import {
+    HANDOFF_CAMERA_DISTANCE,
+    HANDOFF_LEAFLET_ZOOM,
+    cameraDirectionToLatLon
+  } from '../transition/mapping.js';
 
   import places from '../data/places.json';
   import ski from '../data/ski.json';
@@ -14,17 +17,19 @@
   import lived from '../data/lived.json';
 
   const dispatch = createEventDispatcher<{
-    switchToTimeline: void;
+    requestZoomIn: { lat: number; lon: number; leafletZoom: number };
   }>();
 
   export let animationMode = false;
+  export let active = true;
+  export let animator: TimelineAnimator | null = null;
+  export let initialFocus: { lat: number; lon: number; distance: number } | null = null;
 
   let containerElement: HTMLDivElement;
   let overlayElement: HTMLDivElement;
-  let animator: TimelineAnimator | null = null;
-  let animationState: AnimationState;
   let modeSwitching = false;
   let destroyed = false;
+  let handoffFired = false;
 
   // Three.js objects (loaded dynamically)
   let THREE: any;
@@ -39,8 +44,8 @@
   let lastZoom = -1;
   let idleRotationTimeout: ReturnType<typeof window.setTimeout> | null = null;
   let userHasInteracted = false;
+  let initialized = false;
 
-  // Module references
   let globeModules: {
     GLOBE_CONFIG: any;
     setupOrbitControls: any;
@@ -60,7 +65,6 @@
 
   const initializeGlobe = async (): Promise<void> => {
     try {
-      // Dynamic imports for browser-only
       const [
         threeModule,
         globeConfigModule,
@@ -106,56 +110,50 @@
 
       const config = globeModules.GLOBE_CONFIG;
 
-      // Scene
       scene = new THREE.Scene();
       scene.background = new THREE.Color(config.backgroundColor);
 
-      // Camera
       const aspect = containerElement.clientWidth / containerElement.clientHeight;
       camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 100);
+      const focusLat = initialFocus?.lat ?? config.initialFocusLat;
+      const focusLon = initialFocus?.lon ?? config.initialFocusLon;
+      const focusDist = initialFocus?.distance ?? config.initialCameraDistance;
       const initialDirection = globeModules
-        .latLonToVector3(config.initialFocusLat, config.initialFocusLon, 1)
+        .latLonToVector3(focusLat, focusLon, 1)
         .normalize();
-      camera.position.copy(initialDirection.multiplyScalar(config.initialCameraDistance));
+      camera.position.copy(initialDirection.multiplyScalar(focusDist));
       camera.lookAt(0, 0, 0);
 
-      // Renderer
       renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(containerElement.clientWidth, containerElement.clientHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       containerElement.appendChild(renderer.domElement);
 
-      // Controls
       controls = globeModules.setupOrbitControls(camera, renderer.domElement);
+      // Relax the minimum distance so the wheel gesture can continue smoothly
+      // through the handoff point instead of bouncing off the hard stop.
+      controls.minDistance = HANDOFF_CAMERA_DISTANCE - 0.3;
       setupIdleAutoRotate();
 
-      // Base sphere (background behind tiles, fills polar caps)
       const capGeometry = new THREE.SphereGeometry(config.radius * 0.998, 32, 32);
       const capMaterial = new THREE.MeshBasicMaterial({ color: '#b8d4e3' });
       const capSphere = new THREE.Mesh(capGeometry, capMaterial);
       capSphere.renderOrder = -1;
       scene.add(capSphere);
 
-      // Tile system
       tileTextureLoader = new globeModules.TileTextureLoader();
       tileRendererInstance = new globeModules.TileRenderer(scene, tileTextureLoader, config.radius);
 
-      // Markers group
       markerGroup = new THREE.Group();
       scene.add(markerGroup);
 
-      // Initialize animation
-      initializeAnimation();
-
-      // Add static markers if not in animation mode
       if (!animationMode) {
         addAllMarkersStatic();
       }
 
-      // Handle resize
       window.addEventListener('resize', handleResize);
 
-      // Start render loop
+      initialized = true;
       renderLoop();
     } catch (error) {
       console.error('Failed to initialize globe:', error);
@@ -175,31 +173,36 @@
     return globeModules.worldToScreen(pos, camera, renderer.domElement);
   };
 
-  const initializeAnimation = (): void => {
-    const timeline = createTimeline(
-      places as LocationData[],
-      ski as LocationData[],
-      hike as LocationData[],
-      lived as LocationData[]
+  export const addMarker = (entry: TimelineEntry): void => {
+    const iconUrl = MARKER_CONFIGS[entry.type]?.iconUrl;
+    if (!iconUrl || !markerGroup || !camera || !controls || !overlayElement) return;
+    globeModules.addAnimatedMarker(
+      markerGroup, camera, controls, entry, iconUrl,
+      overlayElement, projectToScreen
     );
+  };
 
-    animator = new TimelineAnimator(
-      timeline,
-      (state) => {
-        animationState = state;
-      },
-      (entry: TimelineEntry) => {
-        const iconUrl = MARKER_CONFIGS[entry.type]?.iconUrl;
-        if (iconUrl && markerGroup && camera && controls && overlayElement) {
-          globeModules.addAnimatedMarker(
-            markerGroup, camera, controls, entry, iconUrl,
-            overlayElement, projectToScreen
-          );
-        }
-      }
-    );
+  export const clearMarkers = (): void => {
+    if (markerGroup && globeModules) {
+      globeModules.clearAllMarkers(markerGroup);
+    }
+  };
 
-    animationState = animator.getState();
+  export const refreshStaticMarkers = (): void => {
+    clearMarkers();
+    addAllMarkersStatic();
+  };
+
+  export const focusOn = (lat: number, lon: number, distance: number): void => {
+    if (!camera || !controls || !globeModules) return;
+    // Snap instantly — the crossfade itself provides the sense of motion,
+    // and an animated flyTo would force the user to wait before the fade starts.
+    const direction = globeModules.latLonToVector3(lat, lon, 1).normalize();
+    camera.position.copy(direction.multiplyScalar(distance));
+    camera.lookAt(0, 0, 0);
+    controls.target.set(0, 0, 0);
+    controls.update();
+    handoffFired = false;
   };
 
   const renderLoop = (): void => {
@@ -207,21 +210,14 @@
 
     animationFrameId = requestAnimationFrame(renderLoop);
 
+    if (!active) return;
+
     controls.update();
 
-    // Update tiles based on camera distance
     const cameraDistance = camera.position.length();
     const zoom = globeModules.getZoomForDistance(cameraDistance);
 
     if (zoom !== lastZoom) {
-      console.log('[globe] tile zoom', {
-        zoom,
-        previousZoom: lastZoom,
-        cameraDistance
-      });
-
-      // Preserve in-flight requests during normal zoom transitions to avoid
-      // visible placeholder flicker while orbit damping settles.
       if (lastZoom !== -1 && Math.abs(zoom - lastZoom) > 1) {
         tileTextureLoader.clearQueue();
       }
@@ -232,10 +228,16 @@
     tileRendererInstance.updateTiles(tiles);
     tileRendererInstance.refreshTextures();
 
-    // Update marker scales
     globeModules.updateMarkerScales(markerGroup, cameraDistance);
 
     renderer.render(scene, camera);
+
+    // Handoff to 2D view when camera pushes past the threshold.
+    if (!handoffFired && cameraDistance <= HANDOFF_CAMERA_DISTANCE) {
+      handoffFired = true;
+      const { lat, lon } = cameraDirectionToLatLon(camera.position);
+      dispatch('requestZoomIn', { lat, lon, leafletZoom: HANDOFF_LEAFLET_ZOOM });
+    }
   };
 
   const clearIdleRotationTimeout = (): void => {
@@ -284,58 +286,16 @@
     renderer.setSize(width, height);
   };
 
-  const handlePlay = (): void => {
-    if (!animationMode) {
-      dispatch('switchToTimeline');
-      requestAnimationFrame(() => startAnimation());
-    } else {
-      startAnimation();
-    }
-  };
-
-  const startAnimation = (): void => {
-    if (markerGroup && !animationMode) {
-      globeModules.clearAllMarkers(markerGroup);
-    }
-    animator?.play();
-  };
-
-  const handlePause = (): void => {
-    animator?.pause();
-  };
-
-  const handleReset = (): void => {
-    if (markerGroup) {
-      globeModules.clearAllMarkers(markerGroup);
-      if (!animationMode) {
-        addAllMarkersStatic();
-      }
-    }
-    animator?.reset();
-  };
-
-  const handleSpeedChange = (event: CustomEvent<{ speed: number }>): void => {
-    animator?.setSpeed(event.detail.speed);
-  };
-
   $: if (browser && markerGroup && globeModules && !modeSwitching) {
-    if (!animator) {
-      initializeAnimation();
-    }
-
     if (animationMode) {
-      if (!animationState?.isPlaying) {
+      if (!animator || !animator.getState().isPlaying) {
         globeModules.clearAllMarkers(markerGroup);
-        if (animator) {
-          animator.reset();
-        }
+        animator?.reset();
       }
     } else {
       modeSwitching = true;
       globeModules.clearAllMarkers(markerGroup);
-      if (animator) {
-        animator.pause();
-      }
+      animator?.pause();
       addAllMarkersStatic();
       modeSwitching = false;
     }
@@ -352,9 +312,6 @@
     if (!browser) return;
     if (animationFrameId) {
       cancelAnimationFrame(animationFrameId);
-    }
-    if (animator) {
-      animator.destroy();
     }
     clearIdleRotationTimeout();
     window.removeEventListener('resize', handleResize);
@@ -375,34 +332,14 @@
   });
 </script>
 
-<main>
-  <div class="globe-container" bind:this={containerElement}>
-    <div class="overlay-container" bind:this={overlayElement}></div>
-  </div>
-
-  {#if animationState}
-    <AnimationControls
-      {animationState}
-      isTimelineMode={animationMode}
-      on:play={handlePlay}
-      on:pause={handlePause}
-      on:reset={handleReset}
-      on:speedChange={handleSpeedChange}
-    />
-  {/if}
-</main>
+<div class="globe-container" bind:this={containerElement}>
+  <div class="overlay-container" bind:this={overlayElement}></div>
+</div>
 
 <style>
-  main {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-  }
-
   .globe-container {
-    height: calc(100vh - 140px);
-    width: 100vw;
-    margin: 0;
+    width: 100%;
+    height: 100%;
     position: relative;
     overflow: hidden;
     cursor: grab;
@@ -426,17 +363,5 @@
     display: block;
     width: 100% !important;
     height: 100% !important;
-  }
-
-  @media (max-width: 768px) {
-    .globe-container {
-      height: calc(100vh - 160px);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .globe-container {
-      height: calc(100vh - 180px);
-    }
   }
 </style>

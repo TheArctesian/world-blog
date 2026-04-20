@@ -1,5 +1,5 @@
 <script>
-  import LeafletMap from "$lib/globe/GlobeMap.svelte";
+  import MapSwitcher from "$lib/MapSwitcher.svelte";
   import Info from "$lib/info.svelte";
   import "../app.css";
 
@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <LeafletMap {animationMode} on:switchToTimeline={() => animationMode = true} />
+  <MapSwitcher {animationMode} />
 </div>
 
 <style>
