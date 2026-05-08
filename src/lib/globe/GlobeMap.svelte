@@ -75,7 +75,8 @@
         tileLODModule,
         markersModule,
         overlayModule,
-        tileUtilsModule
+        tileUtilsModule,
+        starsModule
       ] = await Promise.all([
         import('three'),
         import('./globeConfig.js'),
@@ -86,7 +87,8 @@
         import('./tileLOD.js'),
         import('./markers.js'),
         import('./overlay.js'),
-        import('./tileUtils.js')
+        import('./tileUtils.js'),
+        import('./stars.js')
       ]);
 
       THREE = threeModule;
@@ -140,6 +142,9 @@
       const capSphere = new THREE.Mesh(capGeometry, capMaterial);
       capSphere.renderOrder = -1;
       scene.add(capSphere);
+
+      const stars = starsModule.createStarfield();
+      scene.add(stars);
 
       tileTextureLoader = new globeModules.TileTextureLoader();
       tileRendererInstance = new globeModules.TileRenderer(scene, tileTextureLoader, config.radius);

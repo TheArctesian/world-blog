@@ -4,13 +4,19 @@ import { TILE_URL_TEMPLATE, TILE_SEGMENTS } from './globeConfig.js';
 
 /**
  * Convert tile coordinates to lat/lon bounding box (inverse Mercator).
+ * Top and bottom rows are stretched to ±90° so the watercolor texture
+ * covers the polar caps (Mercator natively stops near ±85.05°).
  */
 export function tileToLatLonBounds(tile: TileKey): TileBounds {
 	const n = Math.pow(2, tile.z);
 	const west = (tile.x / n) * 360 - 180;
 	const east = ((tile.x + 1) / n) * 360 - 180;
-	const north = Math.atan(Math.sinh(Math.PI * (1 - (2 * tile.y) / n))) * (180 / Math.PI);
-	const south = Math.atan(Math.sinh(Math.PI * (1 - (2 * (tile.y + 1)) / n))) * (180 / Math.PI);
+	const north = tile.y === 0
+		? 90
+		: Math.atan(Math.sinh(Math.PI * (1 - (2 * tile.y) / n))) * (180 / Math.PI);
+	const south = tile.y === n - 1
+		? -90
+		: Math.atan(Math.sinh(Math.PI * (1 - (2 * (tile.y + 1)) / n))) * (180 / Math.PI);
 	return { north, south, east, west };
 }
 
