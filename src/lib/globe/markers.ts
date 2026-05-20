@@ -69,7 +69,7 @@ export function addAllStaticMarkers(
 ): void {
 	for (const loc of locations) {
 		const sprite = createSpriteMarker(loc.Latitude, loc.Longitude, iconUrl);
-		sprite.userData = { ...sprite.userData, city: loc.City, date: loc.Date };
+		sprite.userData = { ...sprite.userData, location: loc };
 		markerGroup.add(sprite);
 	}
 }
@@ -108,7 +108,7 @@ export async function addAnimatedMarker(
 
 	// Add the marker sprite
 	const sprite = createSpriteMarker(lat, lon, iconUrl);
-	sprite.userData = { ...sprite.userData, city: entry.location.City, date: entry.location.Date };
+	sprite.userData = { ...sprite.userData, location: entry.location };
 	markerGroup.add(sprite);
 
 	// Create HTML label overlay

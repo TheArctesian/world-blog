@@ -15,6 +15,7 @@
   import ski from '../data/ski.json';
   import hike from '../data/mountains.json';
   import lived from '../data/lived.json';
+  import { createPopupContent } from '../marker/staticMarkers.js';
 
   const dispatch = createEventDispatcher<{
     requestZoomIn: { lat: number; lon: number; leafletZoom: number };
@@ -30,6 +31,18 @@
   let modeSwitching = false;
   let destroyed = false;
   let handoffFired = false;
+
+  // Click tooltip state
+  let raycaster: any;
+  let pointerDownPos: { x: number; y: number } | null = null;
+  const CLICK_DRAG_THRESHOLD_PX = 5;
+
+  // Active tooltip (only one at a time)
+  let activeTooltip: {
+    element: HTMLDivElement;
+    sprite: any;
+    interval: ReturnType<typeof setInterval>;
+  } | null = null;
 
   // Three.js objects (loaded dynamically)
   let THREE: any;
@@ -152,10 +165,14 @@
       markerGroup = new THREE.Group();
       scene.add(markerGroup);
 
+      raycaster = new THREE.Raycaster();
+
       if (!animationMode) {
         addAllMarkersStatic();
       }
 
+      renderer.domElement.addEventListener('pointerdown', handlePointerDown);
+      renderer.domElement.addEventListener('pointerup', handlePointerUp);
       window.addEventListener('resize', handleResize);
 
       initialized = true;
@@ -189,6 +206,7 @@
 
   export const clearMarkers = (): void => {
     if (markerGroup && globeModules) {
+      closeActiveTooltip();
       globeModules.clearAllMarkers(markerGroup);
     }
   };
@@ -208,6 +226,81 @@
     controls.target.set(0, 0, 0);
     controls.update();
     handoffFired = false;
+  };
+
+  const handlePointerDown = (event: PointerEvent): void => {
+    pointerDownPos = { x: event.clientX, y: event.clientY };
+  };
+
+  const handlePointerUp = (event: PointerEvent): void => {
+    if (!pointerDownPos) return;
+    const dx = event.clientX - pointerDownPos.x;
+    const dy = event.clientY - pointerDownPos.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    pointerDownPos = null;
+    if (dist > CLICK_DRAG_THRESHOLD_PX) return;
+    handleCanvasClick(event);
+  };
+
+  const handleCanvasClick = (event: PointerEvent): void => {
+    if (!raycaster || !camera || !markerGroup || !renderer) return;
+    const rect = renderer.domElement.getBoundingClientRect();
+    const ndc = new THREE.Vector2(
+      ((event.clientX - rect.left) / rect.width) * 2 - 1,
+      -((event.clientY - rect.top) / rect.height) * 2 + 1
+    );
+    raycaster.setFromCamera(ndc, camera);
+    const intersects = raycaster.intersectObjects(markerGroup.children, false);
+    if (intersects.length === 0) {
+      closeActiveTooltip();
+      return;
+    }
+    const sprite = intersects[0].object;
+    showTooltipForSprite(sprite);
+  };
+
+  const showTooltipForSprite = (sprite: any): void => {
+    if (!overlayElement) return;
+    closeActiveTooltip();
+
+    const location = sprite.userData?.location;
+    if (!location) return;
+    const tooltipEl = document.createElement('div');
+    tooltipEl.className = 'marker-tooltip marker-tooltip-globe';
+    tooltipEl.innerHTML = `
+      <button type="button" class="marker-tooltip-close" aria-label="Close">&times;</button>
+      ${createPopupContent(location)}
+    `;
+    overlayElement.appendChild(tooltipEl);
+
+    const closeBtn = tooltipEl.querySelector('.marker-tooltip-close');
+    closeBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeActiveTooltip();
+    });
+
+    const updatePosition = () => {
+      if (!activeTooltip) return;
+      const screen = projectToScreen(sprite.position);
+      if (screen.visible) {
+        tooltipEl.style.display = 'block';
+        tooltipEl.style.left = `${screen.x}px`;
+        tooltipEl.style.top = `${screen.y}px`;
+      } else {
+        tooltipEl.style.display = 'none';
+      }
+    };
+
+    const interval = setInterval(updatePosition, 16);
+    activeTooltip = { element: tooltipEl, sprite, interval };
+    updatePosition();
+  };
+
+  const closeActiveTooltip = (): void => {
+    if (!activeTooltip) return;
+    clearInterval(activeTooltip.interval);
+    activeTooltip.element.remove();
+    activeTooltip = null;
   };
 
   const renderLoop = (): void => {
@@ -318,9 +411,12 @@
     if (animationFrameId) {
       cancelAnimationFrame(animationFrameId);
     }
+    closeActiveTooltip();
     clearIdleRotationTimeout();
     window.removeEventListener('resize', handleResize);
     if (renderer) {
+      renderer.domElement.removeEventListener('pointerdown', handlePointerDown);
+      renderer.domElement.removeEventListener('pointerup', handlePointerUp);
       renderer.dispose();
       renderer.domElement.remove();
     }
@@ -368,5 +464,12 @@
     display: block;
     width: 100% !important;
     height: 100% !important;
+  }
+
+  :global(.overlay-container .marker-tooltip-globe) {
+    position: absolute;
+    pointer-events: auto;
+    z-index: 200;
+    transform: translate(-50%, calc(-100% - 14px));
   }
 </style>

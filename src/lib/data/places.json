@@ -943,5 +943,13 @@
     "Latitude": 51.4816,
     "Longitude": -3.1791,
     "Notes": "Me and Leela went to go see the Six Nations where Wales played Scotland"
+  },
+  {
+    "City": "Manchester",
+    "Date": "May 2026",
+    "Latitude": 53.4808,
+    "Longitude": -2.2426,
+    "Notes": "",
+    "Rating": 4
   }
 ]

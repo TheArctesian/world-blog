@@ -191,6 +191,150 @@ body {
     border-top-color: var(--paper);
 }
 
+/* ===== Marker tooltip (shared between 2D Leaflet and 3D globe) ===== */
+
+.marker-tooltip {
+    background: var(--paper);
+    border: 2px solid var(--sky-blue);
+    border-radius: 14px;
+    padding: 14px 18px 12px;
+    min-width: 180px;
+    max-width: 260px;
+    font-family: 'Caveat', cursive;
+    color: var(--ink);
+    box-shadow: 4px 4px 14px var(--shadow);
+    transform-origin: bottom center;
+    position: relative;
+}
+
+.marker-tooltip::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 9px solid transparent;
+    border-top-color: var(--sky-blue);
+}
+
+.marker-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-2px);
+    border: 7px solid transparent;
+    border-top-color: var(--paper);
+}
+
+.marker-tooltip-city {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 2px;
+}
+
+.marker-tooltip-date {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--water-blue);
+    line-height: 1.2;
+}
+
+.marker-tooltip-notes {
+    font-family: 'Kalam', cursive;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--ink);
+    margin-top: 8px;
+    line-height: 1.35;
+    opacity: 0.85;
+}
+
+.marker-tooltip-rating {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+    align-items: center;
+}
+
+.marker-tooltip-star {
+    width: 20px;
+    height: 20px;
+    overflow: visible;
+}
+
+.marker-tooltip-star path {
+    stroke: var(--water-blue);
+    stroke-width: 1.6;
+    fill: none;
+}
+
+.marker-tooltip-star.is-filled path {
+    fill: var(--water-blue);
+    fill-opacity: 0.72;
+}
+
+.marker-tooltip-close {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    background: none;
+    border: none;
+    color: var(--ink);
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+    opacity: 0.55;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.marker-tooltip-close:hover {
+    opacity: 1;
+    transform: rotate(8deg);
+}
+
+/* Make the Leaflet popup chrome invisible — .marker-tooltip carries the look. */
+.leaflet-popup.marker-tooltip-leaflet .leaflet-popup-content-wrapper {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+.leaflet-popup.marker-tooltip-leaflet .leaflet-popup-content {
+    margin: 0;
+    padding: 0;
+    width: auto !important;
+    font-family: inherit;
+}
+
+/* Hide Leaflet's built-in popup tip — .marker-tooltip draws its own. */
+.leaflet-popup.marker-tooltip-leaflet .leaflet-popup-tip-container {
+    display: none;
+}
+
+/* Restyle the native close button to match the watercolor theme. */
+.leaflet-popup.marker-tooltip-leaflet .leaflet-popup-close-button {
+    color: var(--ink);
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 600;
+    padding: 6px 10px 0 0;
+    opacity: 0.55;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.leaflet-popup.marker-tooltip-leaflet .leaflet-popup-close-button:hover {
+    opacity: 1;
+    transform: rotate(8deg);
+    background: none;
+    color: var(--ink);
+}
+
 /* Global responsive styles */
 @media (max-width: 768px) {
     .hand-drawn-btn {

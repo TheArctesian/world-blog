@@ -1,6 +1,7 @@
 <script>
   import MapSwitcher from "$lib/MapSwitcher.svelte";
   import Info from "$lib/info.svelte";
+  import TravelStats from "$lib/TravelStats.svelte";
   import "../app.css";
 
   let animationMode = false;
@@ -11,6 +12,10 @@
 </script>
 
 <div class="watercolor-bg paper-texture">
+  <div class="stats-corner">
+    <TravelStats />
+  </div>
+
   <div class="top-controls">
     <button class="mode-toggle hand-drawn-btn" on:click={toggleAnimationMode}>
       {animationMode ? 'Static View' : 'Timeline Animation'}
@@ -24,6 +29,13 @@
 </div>
 
 <style>
+  .stats-corner {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+  }
+
   .top-controls {
     position: fixed;
     top: 20px;
@@ -43,6 +55,11 @@
   }
 
   @media (max-width: 768px) {
+    .stats-corner {
+      top: 10px;
+      left: 10px;
+    }
+
     .top-controls {
       top: 10px;
       right: 10px;
