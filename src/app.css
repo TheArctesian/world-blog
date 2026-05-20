@@ -197,9 +197,9 @@ body {
     background: var(--paper);
     border: 2px solid var(--sky-blue);
     border-radius: 14px;
-    padding: 14px 18px 12px;
-    min-width: 180px;
-    max-width: 260px;
+    padding: 14px 18px 14px;
+    min-width: 220px;
+    max-width: 300px;
     font-family: 'Caveat', cursive;
     color: var(--ink);
     box-shadow: 4px 4px 14px var(--shadow);
@@ -228,39 +228,39 @@ body {
 }
 
 .marker-tooltip-city {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 700;
-    line-height: 1.1;
-    margin-bottom: 2px;
-}
-
-.marker-tooltip-date {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--water-blue);
-    line-height: 1.2;
+    line-height: 1.05;
+    margin: 0 0 6px;
+    padding-right: 80px;     /* reserve space for the postage stamp */
+    letter-spacing: -0.4px;
+    transform: rotate(-1deg);
+    transform-origin: left center;
 }
 
 .marker-tooltip-notes {
     font-family: 'Kalam', cursive;
-    font-size: 13px;
+    font-style: italic;
+    font-size: 13.5px;
     font-weight: 300;
     color: var(--ink);
-    margin-top: 8px;
-    line-height: 1.35;
-    opacity: 0.85;
+    margin-top: 4px;
+    padding: 2px 0 0 10px;
+    border-left: 2px solid color-mix(in srgb, var(--water-blue) 55%, transparent);
+    line-height: 1.45;
+    opacity: 0.92;
 }
 
 .marker-tooltip-rating {
     display: flex;
-    gap: 4px;
-    margin-top: 8px;
+    gap: 5px;
+    margin: 0;
     align-items: center;
 }
 
 .marker-tooltip-star {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     overflow: visible;
 }
 
@@ -273,6 +273,107 @@ body {
 .marker-tooltip-star.is-filled path {
     fill: var(--water-blue);
     fill-opacity: 0.72;
+}
+
+/* ── Hand-drawn divider between header + notes ── */
+.marker-tooltip-divider {
+    height: 6px;
+    margin: 10px -4px 8px;
+    background-image: radial-gradient(
+        circle 1.2px,
+        color-mix(in srgb, var(--ink) 45%, transparent) 99%,
+        transparent 100%
+    );
+    background-size: 7px 6px;
+    background-repeat: repeat-x;
+    background-position: center;
+    opacity: 0.55;
+}
+
+/* ── Postage stamp ── */
+.marker-tooltip-stamp {
+    --stamp-bg: #efe5cb;
+    --stamp-ink: #5d4a2f;
+    --stamp-tilt: -5deg;
+    --notch: 3px;
+    --notch-step: 8px;
+
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 64px;
+    min-height: 56px;
+    padding: 10px 6px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    color: var(--stamp-ink);
+    font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
+    letter-spacing: 0.6px;
+    transform: rotate(var(--stamp-tilt));
+    transform-origin: 60% 50%;
+    box-shadow:
+        1px 2px 3px rgba(0, 0, 0, 0.14),
+        inset 0 0 18px rgba(0, 0, 0, 0.04);
+    /* Perforated edges: paper-colored "bites" tiled along all four edges sit
+       on top of the stamp's body, creating the perforation illusion. */
+    background:
+        radial-gradient(circle var(--notch) at 50% 0%,    var(--paper) 99%, transparent 100%) repeat-x top    / var(--notch-step) calc(var(--notch) * 2),
+        radial-gradient(circle var(--notch) at 50% 100%,  var(--paper) 99%, transparent 100%) repeat-x bottom / var(--notch-step) calc(var(--notch) * 2),
+        radial-gradient(circle var(--notch) at 0%   50%,  var(--paper) 99%, transparent 100%) repeat-y left   / calc(var(--notch) * 2) var(--notch-step),
+        radial-gradient(circle var(--notch) at 100% 50%,  var(--paper) 99%, transparent 100%) repeat-y right  / calc(var(--notch) * 2) var(--notch-step),
+        var(--stamp-bg);
+}
+
+.marker-tooltip-stamp .stamp-month {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    opacity: 0.85;
+    line-height: 1;
+    z-index: 1;
+}
+
+.marker-tooltip-stamp .stamp-year {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    margin-top: 4px;
+    line-height: 1;
+    z-index: 1;
+}
+
+.marker-tooltip-stamp.is-year-only .stamp-month {
+    display: none;
+}
+
+.marker-tooltip-stamp.is-year-only .stamp-year {
+    font-size: 16px;
+    margin: 0;
+    letter-spacing: 0.8px;
+}
+
+.marker-tooltip-stamp .stamp-cancel {
+    position: absolute;
+    inset: -8% -6% -8% -10%;
+    width: 116%;
+    height: 116%;
+    pointer-events: none;
+    transform: rotate(-11deg);
+    opacity: 0.28;
+    z-index: 0;
+}
+
+.marker-tooltip-stamp .stamp-cancel ellipse,
+.marker-tooltip-stamp .stamp-cancel path {
+    fill: none;
+    stroke: var(--stamp-ink);
+    stroke-width: 1.3;
+    stroke-linecap: round;
 }
 
 .marker-tooltip-close {
@@ -376,4 +477,100 @@ body {
     .place-date {
         font-size: 11px;
     }
+}
+
+/* ── Live location marker (Leaflet divIcon) ─────────────────────────────── */
+/* Lives in app.css because Leaflet divIcon HTML is injected outside Svelte
+   scope, so component-scoped styles wouldn't reach it. */
+
+.live-marker-wrapper {
+    background: transparent !important;
+    border: none !important;
+}
+
+.live-marker {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+}
+
+.live-marker__dot {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #c44a3f;
+    border: 2px solid var(--paper, #fdfbf3);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    z-index: 2;
+}
+
+.live-marker__pulse {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(196, 74, 63, 0.45);
+    animation: live-marker-pulse 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    z-index: 1;
+}
+
+@keyframes live-marker-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.65;
+    }
+    70% {
+        transform: scale(2.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(2.8);
+        opacity: 0;
+    }
+}
+
+/* Popup styling for the live marker — slightly different so it reads as
+   "live", not "visited". */
+.live-popup {
+    min-width: 180px;
+    max-width: 240px;
+    text-align: center;
+    padding: 12px 16px;
+}
+
+.live-popup__label {
+    font-family: 'Kalam', cursive;
+    font-size: 11px;
+    text-transform: lowercase;
+    letter-spacing: 0.6px;
+    opacity: 0.65;
+    margin-bottom: 2px;
+}
+
+.live-popup__city {
+    font-family: 'Caveat', cursive;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--ink, #2c3e50);
+}
+
+.live-popup__country {
+    font-family: 'Kalam', cursive;
+    font-size: 12px;
+    opacity: 0.65;
+    margin-top: 2px;
+}
+
+.live-popup__time {
+    font-family: 'Kalam', cursive;
+    font-size: 11px;
+    opacity: 0.55;
+    margin-top: 8px;
+    letter-spacing: 0.3px;
 }

@@ -14,8 +14,36 @@
   import ski from './data/ski.json';
   import hike from './data/mountains.json';
   import lived from './data/lived.json';
+  import type { CurrentLocation } from './currentLocationStore.js';
+  import { GLOBE_CONFIG } from './globe/globeConfig.js';
+  import { MAP_CONFIG } from './map/mapConfig.js';
 
   export let animationMode = false;
+  export let initialLocation: CurrentLocation | null = null;
+
+  // Center both maps on the live Dawarich location at the same default
+  // distance/zoom as before — we're only changing the focus point, not how
+  // wide the initial view is.
+  $: hasLive =
+    !!initialLocation?.available &&
+    typeof initialLocation?.latitude === 'number' &&
+    typeof initialLocation?.longitude === 'number';
+
+  $: globeInitialFocus = hasLive
+    ? {
+        lat: initialLocation!.latitude as number,
+        lon: initialLocation!.longitude as number,
+        distance: GLOBE_CONFIG.initialCameraDistance
+      }
+    : null;
+
+  $: leafletInitialView = hasLive
+    ? {
+        lat: initialLocation!.latitude as number,
+        lon: initialLocation!.longitude as number,
+        zoom: MAP_CONFIG.zoom
+      }
+    : null;
 
   type View = 'globe' | 'leaflet';
   let activeView: View = 'globe';
@@ -114,6 +142,7 @@
         {animationMode}
         {animator}
         active={activeView === 'globe'}
+        initialFocus={globeInitialFocus}
         on:requestZoomIn={handleRequestZoomIn}
       />
     </div>
@@ -127,6 +156,7 @@
         {animationMode}
         {animator}
         active={activeView === 'leaflet'}
+        initialView={leafletInitialView}
         on:requestZoomOut={handleRequestZoomOut}
       />
     </div>

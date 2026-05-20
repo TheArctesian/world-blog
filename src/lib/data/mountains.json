@@ -3,32 +3,41 @@
     "City": "Carran Touhill",
     "Date": "July 2015",
     "Latitude": 51.9995,
-    "Longitude": -9.7427
+    "Longitude": -9.7427,
+    "Notes": "There is not such thing as bad weather only poor preperation, is our guide said it was freezing and pouring. Still really special",
+    "Ratings": 2
   },
   {
     "City": "Mt Fuji",
     "Date": "Sep 2017",
     "Latitude": 35.3606,
-    "Longitude": 138.7274
+    "Longitude": 138.7274,
+    "Notes": "Was really cloudy for our summit and the trails are kinda shit.",
+    "Ratings": 3
+
   },
   {
     "City": "Mt Kilimanjaro",
     "Date": "July 2017",
     "Latitude": -3.0786,
-    "Longitude": 37.3514
+    "Longitude": 37.3514,
+    "Notes": "Very easy apart from the last day, loved doing it with family",
+    "Ratings": 5
   },
   {
     "City": "Mount Rainier",
     "Date": "Aug 2010",
     "Latitude": 46.8523,
     "Longitude": -121.7603,
-    "Notes": "Summited with my uncle Jul 2023"
+    "Notes": "Summited with my uncle Jul 2023",
+    "Ratings": 5
   },
   {
     "City": "Kota Kinabalu",
     "Date": "October 2016",
     "Latitude": 5.9784,
-    "Longitude": 116.0853
+    "Longitude": 116.0853,
+    "Ratings": 3
   },
   {
     "City": "Yosemite",
@@ -40,7 +49,8 @@
     "City": "Mt Kosciusko",
     "Date": "April 2018",
     "Latitude": -36.4556,
-    "Longitude": 148.2693
+    "Longitude": 148.2693,
+    "Ratings": 4
   },
   {
     "City": "Saint Gervais",

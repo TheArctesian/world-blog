@@ -16,6 +16,7 @@
   import hike from '../data/mountains.json';
   import lived from '../data/lived.json';
   import { createPopupContent } from '../marker/staticMarkers.js';
+  import { currentLocation, type CurrentLocation } from '../currentLocationStore.js';
 
   const dispatch = createEventDispatcher<{
     requestZoomIn: { lat: number; lon: number; leafletZoom: number };
@@ -74,7 +75,18 @@
     updateMarkerScales: any;
     worldToScreen: any;
     latLonToVector3: any;
+    createLiveMarker: any;
+    setLiveMarkerPosition: any;
+    updateLiveMarkerPulse: any;
+    disposeLiveMarker: any;
   };
+
+  // Live "currently here" marker lives in its own group so the timeline /
+  // static-mode toggle (which wipes markerGroup) doesn't take it down.
+  let liveMarkerGroup: any = null;
+  let liveMarker: any = null;
+  let liveMarkerStartMs = 0;
+  let unsubscribeLocation: (() => void) | null = null;
 
   const initializeGlobe = async (): Promise<void> => {
     try {
@@ -89,7 +101,8 @@
         markersModule,
         overlayModule,
         tileUtilsModule,
-        starsModule
+        starsModule,
+        liveMarkerModule
       ] = await Promise.all([
         import('three'),
         import('./globeConfig.js'),
@@ -101,7 +114,8 @@
         import('./markers.js'),
         import('./overlay.js'),
         import('./tileUtils.js'),
-        import('./stars.js')
+        import('./stars.js'),
+        import('./liveMarker.js')
       ]);
 
       THREE = threeModule;
@@ -120,7 +134,11 @@
         addAnimatedMarker: markersModule.addAnimatedMarker,
         updateMarkerScales: markersModule.updateMarkerScales,
         worldToScreen: overlayModule.worldToScreen,
-        latLonToVector3: tileUtilsModule.latLonToVector3
+        latLonToVector3: tileUtilsModule.latLonToVector3,
+        createLiveMarker: liveMarkerModule.createLiveMarker,
+        setLiveMarkerPosition: liveMarkerModule.setLiveMarkerPosition,
+        updateLiveMarkerPulse: liveMarkerModule.updateLiveMarkerPulse,
+        disposeLiveMarker: liveMarkerModule.disposeLiveMarker
       };
 
       const config = globeModules.GLOBE_CONFIG;
@@ -165,6 +183,9 @@
       markerGroup = new THREE.Group();
       scene.add(markerGroup);
 
+      liveMarkerGroup = new THREE.Group();
+      scene.add(liveMarkerGroup);
+
       raycaster = new THREE.Raycaster();
 
       if (!animationMode) {
@@ -174,6 +195,10 @@
       renderer.domElement.addEventListener('pointerdown', handlePointerDown);
       renderer.domElement.addEventListener('pointerup', handlePointerUp);
       window.addEventListener('resize', handleResize);
+
+      // Subscribe only after the scene is wired so the first store value
+      // doesn't try to construct a sprite before three is loaded.
+      unsubscribeLocation = currentLocation.subscribe(renderLiveMarker);
 
       initialized = true;
       renderLoop();
@@ -189,6 +214,38 @@
     globeModules.addAllStaticMarkers(markerGroup, ski as LocationData[], MARKER_CONFIGS.ski.iconUrl);
     globeModules.addAllStaticMarkers(markerGroup, hike as LocationData[], MARKER_CONFIGS.hike.iconUrl);
     globeModules.addAllStaticMarkers(markerGroup, lived as LocationData[], MARKER_CONFIGS.lived.iconUrl);
+  };
+
+  const renderLiveMarker = (data: CurrentLocation | null): void => {
+    if (!liveMarkerGroup || !globeModules) return;
+    const usable =
+      data?.available &&
+      typeof data.latitude === 'number' &&
+      typeof data.longitude === 'number';
+
+    if (!usable || !data) {
+      if (liveMarker) {
+        liveMarkerGroup.remove(liveMarker.group);
+        globeModules.disposeLiveMarker(liveMarker);
+        liveMarker = null;
+      }
+      return;
+    }
+
+    if (liveMarker) {
+      globeModules.setLiveMarkerPosition(
+        liveMarker,
+        data.latitude as number,
+        data.longitude as number
+      );
+    } else {
+      liveMarker = globeModules.createLiveMarker(
+        data.latitude as number,
+        data.longitude as number
+      );
+      liveMarkerGroup.add(liveMarker.group);
+      liveMarkerStartMs = performance.now();
+    }
   };
 
   const projectToScreen = (pos: any) => {
@@ -328,6 +385,14 @@
 
     globeModules.updateMarkerScales(markerGroup, cameraDistance);
 
+    if (liveMarker) {
+      globeModules.updateLiveMarkerPulse(
+        liveMarker,
+        performance.now() - liveMarkerStartMs,
+        cameraDistance
+      );
+    }
+
     renderer.render(scene, camera);
 
     // Handoff to 2D view when camera pushes past the threshold.
@@ -408,6 +473,14 @@
   onDestroy(() => {
     destroyed = true;
     if (!browser) return;
+    if (unsubscribeLocation) {
+      unsubscribeLocation();
+      unsubscribeLocation = null;
+    }
+    if (liveMarker && globeModules) {
+      globeModules.disposeLiveMarker(liveMarker);
+      liveMarker = null;
+    }
     if (animationFrameId) {
       cancelAnimationFrame(animationFrameId);
     }

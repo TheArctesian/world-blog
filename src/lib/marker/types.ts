@@ -4,7 +4,7 @@ export interface LocationData {
   Latitude: number;
   Longitude: number;
   Notes?: string;
-  Rating?: number;
+  Ratings?: number | string;
 }
 
 export interface MarkerConfig {

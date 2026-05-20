@@ -4,30 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-- `npm run dev` - Start development server
-- `npm run build` - Create production build  
-- `npm run preview` - Preview production build
-- `npm run check` - Run Svelte type checking
-- `npm run check:watch` - Run type checking in watch mode
-
-## Architecture Overview
-
-This is a SvelteKit application that displays an interactive world map with timeline animation showing places the author has visited, lived, or done activities. The application uses Leaflet.js for mapping functionality with a hand-drawn watercolor aesthetic.
-
-### Key Components
-
-- **LeafletMap.svelte** (`src/lib/LeafletMap.svelte`) - Main map component with animation and static viewing modes
-- **AnimationControls.svelte** (`src/lib/AnimationControls.svelte`) - Timeline controls always visible at bottom
-- **Info.svelte** (`src/lib/info.svelte`) - Information/legend component  
-- **Popup.svelte** (`src/lib/Popup.svelte`) - Popup component (currently commented out)
-
-### Timeline Animation System
-
-- **timelineAnimation.ts** - Core animation logic with TimelineAnimator class
-- **dateUtils.ts** - Handles various date formats from JSON files (years, "July 2005", etc.)
-- **markerUtils.ts** - Marker creation with fade-in animation and auto-pan/zoom functionality
-- **mapConfig.ts** - Centralized map configuration
-- **types.ts** - TypeScript interfaces
+- `bun run dev` - Start development server
+- `bun run build` - Create production build  
+- `bun run preview` - Preview production build
+- `bun run check` - Run Svelte type checking
+- `bun run check:watch` - Run type checking in watch mode
 
 ### Data Structure
 

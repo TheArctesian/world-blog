@@ -10,6 +10,11 @@
   import type { TimelineEntry } from '../timeline/types.js';
   import type { TimelineAnimator } from '../timeline/animator.js';
   import { RETURN_LEAFLET_ZOOM, RETURN_CAMERA_DISTANCE } from '../transition/mapping.js';
+  import {
+    currentLocation,
+    formatAgo,
+    type CurrentLocation
+  } from '../currentLocationStore.js';
 
   import places from '../data/places.json';
   import ski from '../data/ski.json';
@@ -31,6 +36,8 @@
   let icons: Record<string, any> = {};
   let modeSwitching = false;
   let handoffFired = false;
+  let liveMarker: any = null;
+  let unsubscribeLocation: (() => void) | null = null;
 
   const initializeMap = async (): Promise<void> => {
     try {
@@ -46,7 +53,10 @@
         : MAP_CONFIG.center;
       const zoom = initialView?.zoom ?? MAP_CONFIG.zoom;
 
-      map = leafletInstance.map(mapElement).setView(center, zoom);
+      // Default Leaflet zoom controls clash with the top-left stats/location
+      // pills; the watercolor map also reads better without them. Users can
+      // still zoom with scroll wheel and pinch.
+      map = leafletInstance.map(mapElement, { zoomControl: false }).setView(center, zoom);
       map!.setMaxBounds(bounds);
 
       leafletInstance.tileLayer(TILE_LAYER.url, TILE_LAYER.options).addTo(map);
@@ -63,8 +73,80 @@
       }
 
       map!.on('zoomend', handleZoomEnd);
+
+      // Subscribe only after the map is ready so the first store value
+      // doesn't try to render before Leaflet is initialized.
+      unsubscribeLocation = currentLocation.subscribe(renderLiveMarker);
     } catch (error) {
       console.error('Failed to initialize map:', error);
+    }
+  };
+
+  const escapePopupText = (value: string): string =>
+    value.replace(/[&<>"']/g, (ch) => {
+      switch (ch) {
+        case '&': return '&amp;';
+        case '<': return '&lt;';
+        case '>': return '&gt;';
+        case '"': return '&quot;';
+        case "'": return '&#39;';
+        default: return ch;
+      }
+    });
+
+  const buildLivePopupHtml = (data: CurrentLocation): string => {
+    const city = data.city ? escapePopupText(data.city) : 'somewhere';
+    const country = data.country ? escapePopupText(data.country) : '';
+    const seen = data.timestampMs ? formatAgo(data.timestampMs) : '';
+    return `
+      <div class="marker-tooltip marker-tooltip-leaflet-inner live-popup">
+        <div class="live-popup__label">currently around</div>
+        <div class="live-popup__city">${city}</div>
+        ${country ? `<div class="live-popup__country">${country}</div>` : ''}
+        ${seen ? `<div class="live-popup__time">seen ${seen}</div>` : ''}
+      </div>
+    `.trim();
+  };
+
+  const renderLiveMarker = (data: CurrentLocation | null): void => {
+    if (!map || !leafletInstance) return;
+    const usable =
+      data?.available &&
+      typeof data.latitude === 'number' &&
+      typeof data.longitude === 'number';
+
+    if (!usable || !data) {
+      if (liveMarker) {
+        map.removeLayer(liveMarker);
+        liveMarker = null;
+      }
+      return;
+    }
+
+    const html =
+      '<div class="live-marker">' +
+      '<span class="live-marker__pulse"></span>' +
+      '<span class="live-marker__dot"></span>' +
+      '</div>';
+    const icon = leafletInstance.divIcon({
+      className: 'live-marker-wrapper',
+      html,
+      iconSize: [40, 40],
+      iconAnchor: [20, 20]
+    });
+
+    const latlng: [number, number] = [data.latitude as number, data.longitude as number];
+    const popupHtml = buildLivePopupHtml(data);
+
+    if (liveMarker) {
+      liveMarker.setLatLng(latlng);
+      liveMarker.setIcon(icon);
+      liveMarker.setPopupContent(popupHtml);
+    } else {
+      liveMarker = leafletInstance
+        .marker(latlng, { icon, zIndexOffset: 1000, live: true })
+        .bindPopup(popupHtml, { className: 'marker-tooltip-leaflet' })
+        .addTo(map);
     }
   };
 
@@ -143,11 +225,16 @@
   });
 
   onDestroy(() => {
+    if (unsubscribeLocation) {
+      unsubscribeLocation();
+      unsubscribeLocation = null;
+    }
     if (map) {
       map.off('zoomend', handleZoomEnd);
       map.remove();
       map = null;
     }
+    liveMarker = null;
   });
 </script>
 

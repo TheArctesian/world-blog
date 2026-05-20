@@ -15,19 +15,22 @@
     "City": "Niseko",
     "Date": "Feb 2008",
     "Latitude": 42.7929,
-    "Longitude": 140.7409
+    "Longitude": 140.7409,
+    "Ratings": 2
   },
   {
     "City": "Flims",
     "Date": "December 2008",
     "Latitude": 46.774,
-    "Longitude": 9.4458
+    "Longitude": 9.4458,
+    "Ratings": 4
   },
   {
     "City": "Bariloche",
     "Date": 2023,
     "Latitude": -41.13,
-    "Longitude": -71.3133
+    "Longitude": -71.3133,
+    "Ratings": 5
   },
   {
     "City": "Saas-Fee",
@@ -41,38 +44,43 @@
     "Date": "Aug 2022",
     "Latitude": 39.0968,
     "Longitude": -120.0324,
-    "Notes": ""
+    "Ratings": 2
   },
   {
     "City": "Deer Valley",
     "Date": "Feb 2015",
     "Latitude": 40.6374,
-    "Longitude": -111.4782
+    "Longitude": -111.4782,
+    "Ratings": 4
   },
   {
     "City": "Telluride",
     "Date": "Jul 2022",
     "Latitude": 37.9374,
-    "Longitude": -107.8481
+    "Longitude": -107.8481,
+    "Ratings": 4
   },
   {
     "City": "Jackson Hole",
     "Date": "Feb 2016",
     "Latitude": 43.4799,
-    "Longitude": -110.7624
+    "Longitude": -110.7624,
+    "Ratings": 5
   },
   {
     "City": "Whistler",
     "Date": "March 2013",
     "Latitude": 50.1164,
     "Longitude": -122.9578,
-    "Notes": "Whistler is a place that I have visited many times in my life. It is a fantastic ski resort where many of my friends have places. The skiing is great but the town is also loads of fun as well. One place I always go back to is \"Cows\", the worlds best ice cream."
+    "Notes": "Whistler is a place that I have visited many times in my life. It is a fantastic ski resort where many of my friends have places. The skiing is great but the town is also loads of fun as well. One place I always go back to is \"Cows\", the worlds best ice cream.",
+    "Ratings": 5
   },
   {
     "City": "Hakuba",
     "Date": "Dec 31 2025",
     "Latitude": 36.6983,
     "Longitude": 137.8619,
-    "Notes": ""
+    "Notes": "",
+    "Ratings": 4
   }
 ]

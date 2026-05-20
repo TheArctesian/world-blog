@@ -32,15 +32,96 @@ const renderStars = (rating: number): string => {
   return html;
 };
 
+const MONTH_ABBREV: Record<string, string> = {
+  jan: 'JAN', january: 'JAN',
+  feb: 'FEB', february: 'FEB',
+  mar: 'MAR', march: 'MAR',
+  apr: 'APR', april: 'APR',
+  may: 'MAY',
+  jun: 'JUN', june: 'JUN',
+  jul: 'JUL', july: 'JUL',
+  aug: 'AUG', august: 'AUG',
+  sep: 'SEP', sept: 'SEP', september: 'SEP',
+  oct: 'OCT', october: 'OCT',
+  nov: 'NOV', november: 'NOV',
+  dec: 'DEC', december: 'DEC'
+};
+
+const parseDateForStamp = (raw: string | number): { month: string | null; year: string; original: string } => {
+  const original = String(raw).trim();
+  // "Month YYYY" — e.g. "May 2026", "July 2005"
+  const monthYear = original.match(/^([A-Za-z]+)\s+(\d{4})$/);
+  if (monthYear) {
+    const month = MONTH_ABBREV[monthYear[1].toLowerCase()];
+    if (month) return { month, year: monthYear[2], original };
+  }
+  // Year only — e.g. 2019
+  const yearOnly = original.match(/^(\d{4})$/);
+  if (yearOnly) return { month: null, year: yearOnly[1], original };
+  // Fallback: shove whatever it is into the year slot
+  return { month: null, year: original, original };
+};
+
+// Watercolor stamp palette — each entry pairs a soft body tone with a deeper
+// ink tone for the date type and cancel mark. Cities pick deterministically
+// from this list so a given marker always lands the same color, but adjacent
+// markers on the map look like genuinely different pieces of mail.
+const STAMP_PALETTE: { bg: string; ink: string; tilt: number }[] = [
+  { bg: '#efe5cb', ink: '#5d4a2f', tilt: -5 }, // warm sepia
+  { bg: '#e9c9c2', ink: '#6b3b3b', tilt: 4 },  // dusty rose
+  { bg: '#cad9c0', ink: '#3d5a3f', tilt: -3 }, // sage
+  { bg: '#c5d6e1', ink: '#2c4a63', tilt: 5 },  // faded blue
+  { bg: '#edd8a8', ink: '#6e5224', tilt: -6 }, // pale ochre
+  { bg: '#d9cee2', ink: '#4a3a63', tilt: 3 },  // lavender
+  { bg: '#dfc9b8', ink: '#5a3e26', tilt: -4 }, // kraft
+];
+
+const hashString = (s: string): number => {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+};
+
+const pickStampStyle = (city: string) => STAMP_PALETTE[hashString(city) % STAMP_PALETTE.length];
+
+const renderStamp = (city: string, rawDate: string | number): string => {
+  const { month, year, original } = parseDateForStamp(rawDate);
+  const { bg, ink, tilt } = pickStampStyle(city);
+  const monthHtml = month ? `<span class="stamp-month">${escapeHtml(month)}</span>` : '';
+  const yearHtml = `<span class="stamp-year">${escapeHtml(year)}</span>`;
+  // Cancel mark: an elliptical "kiss" plus a soft wave — like a real postmark
+  // that swept across the stamp on its way through the system.
+  const cancel = `
+    <svg class="stamp-cancel" viewBox="0 0 80 60" aria-hidden="true">
+      <ellipse cx="40" cy="30" rx="30" ry="19" />
+      <path d="M6 38 q10 -4 20 0 t20 0 t20 0" />
+    </svg>
+  `;
+  const modifier = month ? '' : ' is-year-only';
+  const styleAttr = `style="--stamp-bg: ${bg}; --stamp-ink: ${ink}; --stamp-tilt: ${tilt}deg;"`;
+  return `
+    <div class="marker-tooltip-stamp${modifier}" ${styleAttr} aria-label="Visited ${escapeHtml(original)}">
+      ${monthHtml}
+      ${yearHtml}
+      ${cancel}
+    </div>
+  `;
+};
+
 export const createPopupContent = (location: LocationData): string => {
   const city = escapeHtml(location.City);
-  const date = escapeHtml(String(location.Date));
-  const ratingHtml = typeof location.Rating === 'number' ? renderStars(location.Rating) : '';
-  const notesHtml = location.Notes ? `<div class="marker-tooltip-notes">${escapeHtml(location.Notes)}</div>` : '';
+  const stampHtml = renderStamp(location.City, location.Date);
+  const ratingHtml = typeof location.Ratings === 'number' ? renderStars(location.Ratings) : '';
+  const notesHtml = location.Notes
+    ? `<div class="marker-tooltip-notes">${escapeHtml(location.Notes)}</div>`
+    : '';
   return `
+    ${stampHtml}
     <div class="marker-tooltip-city">${city}</div>
-    <div class="marker-tooltip-date">Date first visited ${date}</div>
     ${ratingHtml}
+    <div class="marker-tooltip-divider" aria-hidden="true"></div>
     ${notesHtml}
   `.trim();
 };
@@ -62,7 +143,9 @@ export const addMarkersToMap = (
 
 export const clearAllMarkers = (map: Map): void => {
   map.eachLayer((layer: any) => {
-    if (layer.options && layer.options.icon) {
+    // `live: true` flags the live-location marker so toggling timeline / static
+    // mode doesn't repeatedly add and remove it.
+    if (layer.options && layer.options.icon && !layer.options.live) {
       map.removeLayer(layer);
     }
   });
