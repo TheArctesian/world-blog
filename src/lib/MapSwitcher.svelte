@@ -181,10 +181,14 @@
     height: 100vh;
   }
 
+  /* Bottom reservation = actual .timeline-controls height + small buffer.
+     The timeline is position: fixed bottom: 0, so this just keeps the map
+     from rendering under it. Over-reserving creates dead space between the
+     map's attribution strip and the timeline UI. */
   .map-stack {
     position: relative;
     width: 100vw;
-    height: calc(100vh - 140px);
+    height: calc(100vh - 92px);
     overflow: hidden;
   }
 
@@ -201,15 +205,11 @@
     pointer-events: auto;
   }
 
-  @media (max-width: 768px) {
-    .map-stack {
-      height: calc(100vh - 160px);
-    }
-  }
-
   @media (max-width: 480px) {
+    /* Mobile: bottom-row collapses to a column inside .timeline-controls,
+       so the strip is taller (~109px). */
     .map-stack {
-      height: calc(100vh - 180px);
+      height: calc(100vh - 120px);
     }
   }
 </style>

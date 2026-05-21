@@ -95,14 +95,22 @@
     });
 
   const buildLivePopupHtml = (data: CurrentLocation): string => {
-    const city = data.city ? escapePopupText(data.city) : 'somewhere';
-    const country = data.country ? escapePopupText(data.country) : '';
+    // Mirror the pill's two-tier display: most specific name big, the rest
+    // as context underneath.
+    const primary = data.district || data.city || 'somewhere';
+    const contextParts: string[] = [];
+    if (data.district && data.city) contextParts.push(data.city);
+    if (data.region) contextParts.push(data.region);
+    const primaryHtml = escapePopupText(primary);
+    const contextHtml = contextParts.length
+      ? escapePopupText(contextParts.join(', '))
+      : '';
     const seen = data.timestampMs ? formatAgo(data.timestampMs) : '';
     return `
       <div class="marker-tooltip marker-tooltip-leaflet-inner live-popup">
         <div class="live-popup__label">currently around</div>
-        <div class="live-popup__city">${city}</div>
-        ${country ? `<div class="live-popup__country">${country}</div>` : ''}
+        <div class="live-popup__city">${primaryHtml}</div>
+        ${contextHtml ? `<div class="live-popup__country">${contextHtml}</div>` : ''}
         ${seen ? `<div class="live-popup__time">seen ${seen}</div>` : ''}
       </div>
     `.trim();

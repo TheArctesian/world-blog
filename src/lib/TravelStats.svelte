@@ -2,79 +2,67 @@
   import { totalPlaces, totalCountries } from './data/placeStats';
 </script>
 
-<div class="travel-stats paper-texture" aria-label="Travel statistics">
+<div class="travel-stats" aria-label="{totalPlaces} places visited across {totalCountries} countries">
   <div class="stat">
     <span class="number">{totalPlaces}</span>
-    <span class="label">places</span>
+    <span class="label">
+      places
+      <small>visited</small>
+    </span>
   </div>
-  <div class="divider" aria-hidden="true"></div>
   <div class="stat">
     <span class="number">{totalCountries}</span>
-    <span class="label">countries</span>
+    <span class="label">
+      countries
+      <small>across</small>
+    </span>
   </div>
 </div>
 
 <style>
   .travel-stats {
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    padding: 10px 16px;
-    background: var(--paper, #fdfbf3);
-    border: 2px solid var(--border-soft, rgba(60, 60, 60, 0.35));
-    border-radius: 14px;
-    box-shadow: 4px 4px 12px var(--shadow, rgba(0, 0, 0, 0.12));
-    transform: rotate(-1deg);
-    font-family: 'Kalam', cursive;
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
     color: var(--ink, #2c3e50);
     user-select: none;
+    line-height: 1;
   }
 
   .stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
   }
 
   .number {
     font-family: 'Caveat', cursive;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: 700;
+    line-height: 1;
   }
 
   .label {
-    font-size: 12px;
-    font-weight: 500;
-    margin-top: 2px;
-    letter-spacing: 0.4px;
-    text-transform: lowercase;
+    font-family: 'Kalam', cursive;
+    font-size: 13px;
+    letter-spacing: 0.2px;
+    line-height: 1.05;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .divider {
-    width: 2px;
-    height: 28px;
-    background: var(--border-soft, rgba(60, 60, 60, 0.35));
-    border-radius: 2px;
-    transform: rotate(4deg);
+  .label small {
+    font-style: italic;
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 1px;
   }
 
   @media (max-width: 480px) {
-    .travel-stats {
-      gap: 10px;
-      padding: 8px 12px;
-    }
-
-    .number {
-      font-size: 22px;
-    }
-
-    .label {
-      font-size: 11px;
-    }
-
-    .divider {
-      height: 22px;
-    }
+    .travel-stats { gap: 14px; }
+    .number { font-size: 24px; }
+    .label { font-size: 12px; }
+    .label small { font-size: 10px; }
   }
 </style>

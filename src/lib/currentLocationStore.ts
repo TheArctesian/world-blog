@@ -3,8 +3,11 @@ import { browser } from '$app/environment';
 
 export type CurrentLocation = {
   available: boolean;
+  district?: string | null;
   city?: string | null;
+  region?: string | null;
   country?: string | null;
+  label?: string | null;
   latitude?: number;
   longitude?: number;
   timestampMs?: number;
