@@ -23,6 +23,7 @@
   }>();
 
   export let animationMode = false;
+  export let heatMode = false;
   export let active = true;
   export let animator: TimelineAnimator | null = null;
   export let initialFocus: { lat: number; lon: number; distance: number } | null = null;
@@ -87,6 +88,10 @@
   let liveMarker: any = null;
   let liveMarkerStartMs = 0;
   let unsubscribeLocation: (() => void) | null = null;
+
+  // Translucent shell wrapping the globe with the baked heat texture.
+  let heatShell: { mesh: any; dispose(): void } | null = null;
+  let heatShellPending = false;
 
   const initializeGlobe = async (): Promise<void> => {
     try {
@@ -188,7 +193,7 @@
 
       raycaster = new THREE.Raycaster();
 
-      if (!animationMode) {
+      if (!animationMode && !heatMode) {
         addAllMarkersStatic();
       }
 
@@ -214,6 +219,39 @@
     globeModules.addAllStaticMarkers(markerGroup, ski as LocationData[], MARKER_CONFIGS.ski.iconUrl);
     globeModules.addAllStaticMarkers(markerGroup, hike as LocationData[], MARKER_CONFIGS.hike.iconUrl);
     globeModules.addAllStaticMarkers(markerGroup, lived as LocationData[], MARKER_CONFIGS.lived.iconUrl);
+  };
+
+  /**
+   * Add or drop the heat shell. The texture bake is a few milliseconds of
+   * canvas work and a 2048x1024 upload, so it is deferred until the mode is
+   * first entered and then kept alive for the rest of the session.
+   */
+  const syncHeatShell = async (enabled: boolean): Promise<void> => {
+    if (!scene || !globeModules || heatShellPending) return;
+
+    if (!enabled) {
+      if (heatShell) {
+        scene.remove(heatShell.mesh);
+        heatShell.dispose();
+        heatShell = null;
+      }
+      return;
+    }
+
+    if (heatShell) return;
+
+    heatShellPending = true;
+    try {
+      const { createGlobeHeatShell } = await import('../heat/globeHeat.js');
+      // The mode may have been switched away again while the chunk loaded.
+      if (!scene || !heatMode) return;
+      heatShell = createGlobeHeatShell(globeModules.GLOBE_CONFIG.radius);
+      scene.add(heatShell.mesh);
+    } catch (error) {
+      console.error('Failed to load globe heat shell:', error);
+    } finally {
+      heatShellPending = false;
+    }
   };
 
   const renderLiveMarker = (data: CurrentLocation | null): void => {
@@ -449,12 +487,24 @@
     renderer.setSize(width, height);
   };
 
+  $: if (browser && initialized) {
+    syncHeatShell(heatMode);
+  }
+
   $: if (browser && markerGroup && globeModules && !modeSwitching) {
     if (animationMode) {
       if (!animator || !animator.getState().isPlaying) {
         globeModules.clearAllMarkers(markerGroup);
         animator?.reset();
       }
+    } else if (heatMode) {
+      // The wash carries the whole story in this mode; markers on top of it
+      // would just be visual noise.
+      modeSwitching = true;
+      closeActiveTooltip();
+      globeModules.clearAllMarkers(markerGroup);
+      animator?.pause();
+      modeSwitching = false;
     } else {
       modeSwitching = true;
       globeModules.clearAllMarkers(markerGroup);
@@ -480,6 +530,11 @@
     if (liveMarker && globeModules) {
       globeModules.disposeLiveMarker(liveMarker);
       liveMarker = null;
+    }
+    if (heatShell) {
+      scene?.remove(heatShell.mesh);
+      heatShell.dispose();
+      heatShell = null;
     }
     if (animationFrameId) {
       cancelAnimationFrame(animationFrameId);

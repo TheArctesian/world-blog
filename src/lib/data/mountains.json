@@ -10,15 +10,20 @@
   {
     "City": "Mt Fuji",
     "Date": "Sep 2017",
+    "Start": "2017-09-09",
+    "End": "2017-09-10",
+    "Days": 2,
     "Latitude": 35.3606,
     "Longitude": 138.7274,
     "Notes": "Was really cloudy for our summit and the trails are kinda shit.",
     "Ratings": 3
-
   },
   {
     "City": "Mt Kilimanjaro",
     "Date": "July 2017",
+    "Start": "2017-07-21",
+    "End": "2017-07-26",
+    "Days": 6,
     "Latitude": -3.0786,
     "Longitude": 37.3514,
     "Notes": "Very easy apart from the last day, loved doing it with family",
@@ -42,12 +47,18 @@
   {
     "City": "Yosemite",
     "Date": "September 2023",
+    "Start": "2023-09-16",
+    "End": "2023-09-16",
+    "Days": 1,
     "Latitude": 37.8651,
     "Longitude": -119.5383
   },
   {
     "City": "Mt Kosciusko",
     "Date": "April 2018",
+    "Start": "2018-05-01",
+    "End": "2018-05-01",
+    "Days": 1,
     "Latitude": -36.4556,
     "Longitude": 148.2693,
     "Ratings": 4
@@ -55,6 +66,9 @@
   {
     "City": "Saint Gervais",
     "Date": "Aug 12th 2024",
+    "Start": "2024-08-12",
+    "End": "2024-08-12",
+    "Days": 1,
     "Latitude": 45.8919,
     "Longitude": 6.7126,
     "Notes": "Tour du Mont-Blanc: Day 1"
@@ -62,6 +76,9 @@
   {
     "City": "Les Houches",
     "Date": "Aug 13th 2024",
+    "Start": "2024-08-13",
+    "End": "2024-08-13",
+    "Days": 1,
     "Latitude": 45.8912,
     "Longitude": 6.7983,
     "Notes": "Tour du Mont-Blanc: Day 2"
@@ -69,6 +86,9 @@
   {
     "City": "Argentiere",
     "Date": "Aug 13th-14th 2024",
+    "Start": "2024-08-13",
+    "End": "2024-08-14",
+    "Days": 2,
     "Latitude": 45.9829,
     "Longitude": 6.9227,
     "Notes": "Tour du Mont-Blanc: Day 3"
@@ -76,6 +96,9 @@
   {
     "City": "Vallorcine",
     "Date": "Aug 15th 2024",
+    "Start": "2024-08-15",
+    "End": "2024-08-15",
+    "Days": 1,
     "Latitude": 46.0294,
     "Longitude": 6.9341,
     "Notes": "Tour du Mont-Blanc: Day 4"
@@ -83,6 +106,9 @@
   {
     "City": "La Forclaz",
     "Date": "Aug 16th 2024",
+    "Start": "2024-08-16",
+    "End": "2024-08-16",
+    "Days": 1,
     "Latitude": 46.0569,
     "Longitude": 7.0012,
     "Notes": "Tour du Mont-Blanc: Day 5"
@@ -90,6 +116,9 @@
   {
     "City": "Champex",
     "Date": "Aug 17th 2024",
+    "Start": "2024-08-17",
+    "End": "2024-08-17",
+    "Days": 1,
     "Latitude": 46.0297,
     "Longitude": 7.1119,
     "Notes": "Tour du Mont-Blanc: Day 6"
@@ -97,6 +126,9 @@
   {
     "City": "La Fouly",
     "Date": "Aug 18th 2024",
+    "Start": "2024-08-18",
+    "End": "2024-08-18",
+    "Days": 1,
     "Latitude": 45.9333,
     "Longitude": 7.0833,
     "Notes": "Tour du Mont-Blanc: Day 7"
@@ -104,6 +136,9 @@
   {
     "City": "Courmayeur",
     "Date": "Aug 19th 2024",
+    "Start": "2024-08-19",
+    "End": "2024-08-19",
+    "Days": 1,
     "Latitude": 45.7967,
     "Longitude": 6.9674,
     "Notes": "Tour du Mont-Blanc: Day 8"
@@ -111,6 +146,9 @@
   {
     "City": "Ville des Glaciers",
     "Date": "Aug 20th 2024",
+    "Start": "2024-08-20",
+    "End": "2024-08-20",
+    "Days": 1,
     "Latitude": 45.7167,
     "Longitude": 6.7333,
     "Notes": "Tour du Mont-Blanc: Day 9"
@@ -118,6 +156,9 @@
   {
     "City": "Les Contamines",
     "Date": "Aug 21st 2024",
+    "Start": "2024-08-21",
+    "End": "2024-08-21",
+    "Days": 1,
     "Latitude": 45.8206,
     "Longitude": 6.7281,
     "Notes": "Tour du Mont-Blanc: Day 10"
@@ -125,6 +166,9 @@
   {
     "City": "Chamonix",
     "Date": "Aug 21st 2024",
+    "Start": "2024-08-21",
+    "End": "2024-08-21",
+    "Days": 1,
     "Latitude": 45.9237,
     "Longitude": 6.8694,
     "Notes": "Tour du Mont-Blanc: Day 11"

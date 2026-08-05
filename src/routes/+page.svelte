@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import MapSwitcher from "$lib/MapSwitcher.svelte";
   import Info from "$lib/info.svelte";
   import TravelStats from "$lib/TravelStats.svelte";
   import CurrentLocation from "$lib/CurrentLocation.svelte";
+  import HeatLegend from "$lib/heat/HeatLegend.svelte";
   import { currentLocation } from "$lib/currentLocationStore.js";
   import "../app.css";
   import type { PageData } from "./$types";
@@ -16,11 +16,20 @@
     currentLocation.set(data.initialLocation);
   }
 
-  let animationMode = false;
+  type ViewMode = 'places' | 'timeline' | 'heat';
 
-  const toggleAnimationMode = () => {
-    animationMode = !animationMode;
-  };
+  // Slight per-button tilts so the group reads as three things pinned to paper
+  // rather than one machined segmented control.
+  const MODES: { id: ViewMode; label: string; tilt: number }[] = [
+    { id: 'places', label: 'Places', tilt: -1.2 },
+    { id: 'timeline', label: 'Timeline', tilt: 0.7 },
+    { id: 'heat', label: 'Time spent', tilt: -0.8 }
+  ];
+
+  let viewMode: ViewMode = 'places';
+
+  $: animationMode = viewMode === 'timeline';
+  $: heatMode = viewMode === 'heat';
 
   $: locVisible = !!$currentLocation?.available &&
     !!($currentLocation?.label || $currentLocation?.city || $currentLocation?.district);
@@ -38,15 +47,33 @@
   </div>
 
   <div class="top-controls">
-    <button class="mode-toggle hand-drawn-btn" on:click={toggleAnimationMode}>
-      {animationMode ? 'Static View' : 'Timeline Animation'}
-    </button>
+    <div class="mode-switch" role="group" aria-label="Map mode">
+      {#each MODES as mode}
+        <button
+          type="button"
+          class="mode-option"
+          class:is-active={viewMode === mode.id}
+          style="--tilt: {mode.tilt}deg"
+          aria-pressed={viewMode === mode.id}
+          on:click={() => (viewMode = mode.id)}
+        >
+          {mode.label}
+        </button>
+      {/each}
+    </div>
     <div class="info-container">
       <Info />
     </div>
   </div>
 
-  <MapSwitcher {animationMode} initialLocation={data.initialLocation} />
+  <!-- Kept mounted and toggled with CSS rather than {#if} + a transition: an
+       interrupted outro can leave the node behind at opacity 0, and an invisible
+       fixed-position card still swallows clicks on the map beneath it. -->
+  <div class="legend-corner" class:is-visible={heatMode} aria-hidden={!heatMode}>
+    <HeatLegend />
+  </div>
+
+  <MapSwitcher {animationMode} {heatMode} initialLocation={data.initialLocation} />
 </div>
 
 <style>
@@ -126,6 +153,98 @@
     position: relative;
   }
 
+  /* Three modes pinned to a strip of paper. The card underneath carries the
+     frosted substrate; each option only paints itself when it's the live one,
+     so the group stays quiet until you look at it. */
+  .mode-switch {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 16px;
+    background: rgba(250, 248, 243, 0.72);
+    -webkit-backdrop-filter: blur(8px) saturate(1.05);
+    backdrop-filter: blur(8px) saturate(1.05);
+    box-shadow: 3px 3px 8px var(--shadow);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .mode-switch {
+      background: rgba(250, 248, 243, 0.92);
+    }
+  }
+
+  .mode-option {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--ink);
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 6px 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    transform: rotate(var(--tilt));
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .mode-option:hover:not(.is-active) {
+    border-color: color-mix(in srgb, var(--water-blue) 55%, transparent);
+    transform: rotate(0deg) translateY(-1px);
+  }
+
+  .mode-option:focus-visible {
+    outline: 2px dashed var(--water-blue);
+    outline-offset: 2px;
+  }
+
+  .mode-option.is-active {
+    background: var(--water-blue);
+    border-color: var(--water-blue);
+    color: var(--paper);
+    box-shadow: 2px 2px 6px var(--shadow);
+  }
+
+  /* Sits clear of the timeline strip along the bottom of the viewport. */
+  .legend-corner {
+    position: fixed;
+    left: 24px;
+    bottom: 104px;
+    z-index: 1000;
+    max-width: calc(100vw - 48px);
+    opacity: 0;
+    visibility: hidden;
+    /* Not animatable, so it takes effect on the same frame as the class change:
+       the card stops intercepting map clicks the instant heat mode is left,
+       without waiting on the fade. */
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 0.24s ease, transform 0.24s ease, visibility 0s linear 0.24s;
+  }
+
+  .legend-corner.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition: opacity 0.24s ease, transform 0.24s ease, visibility 0s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .legend-corner {
+      transition: opacity 0.01s linear, visibility 0s linear 0.01s;
+      transform: none;
+    }
+
+    .legend-corner.is-visible {
+      transition: opacity 0.01s linear, visibility 0s;
+      transform: none;
+    }
+  }
+
   @media (max-width: 768px) {
     .stats-corner {
       top: 12px;
@@ -139,6 +258,17 @@
       right: 10px;
       gap: 8px;
     }
+
+    .mode-option {
+      font-size: 15px;
+      padding: 5px 10px;
+    }
+
+    .legend-corner {
+      left: 14px;
+      bottom: 100px;
+      max-width: calc(100vw - 28px);
+    }
   }
 
   @media (max-width: 480px) {
@@ -151,6 +281,15 @@
       flex-direction: column;
       align-items: flex-end;
       gap: 8px;
+    }
+
+    .mode-option {
+      font-size: 14px;
+      padding: 4px 9px;
+    }
+
+    .legend-corner {
+      bottom: 128px;
     }
   }
 </style>

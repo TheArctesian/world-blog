@@ -19,6 +19,7 @@
   import { MAP_CONFIG } from './map/mapConfig.js';
 
   export let animationMode = false;
+  export let heatMode = false;
   export let initialLocation: CurrentLocation | null = null;
 
   // Center both maps on the live Dawarich location at the same default
@@ -119,7 +120,7 @@
     animator?.reset();
     globeMap?.clearMarkers();
     leafletMap?.clearMarkers();
-    if (!animationMode) {
+    if (!animationMode && !heatMode) {
       globeMap?.refreshStaticMarkers();
       leafletMap?.refreshStaticMarkers();
     }
@@ -140,6 +141,7 @@
       <GlobeMap
         bind:this={globeMap}
         {animationMode}
+        {heatMode}
         {animator}
         active={activeView === 'globe'}
         initialFocus={globeInitialFocus}
@@ -154,6 +156,7 @@
       <LeafletMap
         bind:this={leafletMap}
         {animationMode}
+        {heatMode}
         {animator}
         active={activeView === 'leaflet'}
         initialView={leafletInitialView}

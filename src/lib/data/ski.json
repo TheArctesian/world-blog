@@ -28,6 +28,9 @@
   {
     "City": "Bariloche",
     "Date": 2023,
+    "Start": "2023-07-03",
+    "End": "2023-07-07",
+    "Days": 5,
     "Latitude": -41.13,
     "Longitude": -71.3133,
     "Ratings": 5
@@ -42,6 +45,9 @@
   {
     "City": "Lake Tahoe",
     "Date": "Aug 2022",
+    "Start": "2022-07-01",
+    "End": "2022-07-04",
+    "Days": 4,
     "Latitude": 39.0968,
     "Longitude": -120.0324,
     "Ratings": 2
@@ -49,6 +55,9 @@
   {
     "City": "Deer Valley",
     "Date": "Feb 2015",
+    "Start": "2015-02-17",
+    "End": "2015-02-22",
+    "Days": 6,
     "Latitude": 40.6374,
     "Longitude": -111.4782,
     "Ratings": 4
@@ -56,6 +65,9 @@
   {
     "City": "Telluride",
     "Date": "Jul 2022",
+    "Start": "2022-07-26",
+    "End": "2022-07-27",
+    "Days": 2,
     "Latitude": 37.9374,
     "Longitude": -107.8481,
     "Ratings": 4
@@ -63,6 +75,9 @@
   {
     "City": "Jackson Hole",
     "Date": "Feb 2016",
+    "Start": "2016-02-07",
+    "End": "2016-02-08",
+    "Days": 2,
     "Latitude": 43.4799,
     "Longitude": -110.7624,
     "Ratings": 5
@@ -78,6 +93,9 @@
   {
     "City": "Hakuba",
     "Date": "Dec 31 2025",
+    "Start": "2025-12-31",
+    "End": "2025-12-31",
+    "Days": 1,
     "Latitude": 36.6983,
     "Longitude": 137.8619,
     "Notes": "",

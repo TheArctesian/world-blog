@@ -26,6 +26,7 @@
   }>();
 
   export let animationMode = false;
+  export let heatMode = false;
   export let active = true;
   export let animator: TimelineAnimator | null = null;
   export let initialView: { lat: number; lon: number; zoom: number } | null = null;
@@ -38,6 +39,8 @@
   let handoffFired = false;
   let liveMarker: any = null;
   let unsubscribeLocation: (() => void) | null = null;
+  let heatLayer: any = null;
+  let heatLayerPending = false;
 
   const initializeMap = async (): Promise<void> => {
     try {
@@ -68,7 +71,7 @@
         lived: createIcon(leafletInstance, MARKER_CONFIGS.lived)
       };
 
-      if (!animationMode) {
+      if (!animationMode && !heatMode) {
         addAllMarkersStatic();
       }
 
@@ -209,7 +212,44 @@
 
   export const invalidateSize = (): void => {
     map?.invalidateSize();
+    // The heat canvas is sized from the map viewport, so a container resize has
+    // to re-run its layout too — the map's own `resize` event doesn't fire for
+    // an invalidateSize triggered by the globe/leaflet crossfade.
+    heatLayer?._reset?.();
   };
+
+  // The heat renderer is only pulled in when the mode is first entered; it is
+  // dead weight for visitors who never leave the marker views.
+  const syncHeatLayer = async (enabled: boolean): Promise<void> => {
+    if (!map || !leafletInstance || heatLayerPending) return;
+
+    if (!enabled) {
+      if (heatLayer) {
+        map.removeLayer(heatLayer);
+        heatLayer = null;
+      }
+      return;
+    }
+
+    if (heatLayer) return;
+
+    heatLayerPending = true;
+    try {
+      const { createHeatLayer } = await import('../heat/leafletHeat.js');
+      // The mode may have been switched away again while the chunk loaded.
+      if (!map || !heatMode) return;
+      heatLayer = createHeatLayer(leafletInstance);
+      heatLayer.addTo(map);
+    } catch (error) {
+      console.error('Failed to load heat layer:', error);
+    } finally {
+      heatLayerPending = false;
+    }
+  };
+
+  $: if (map && leafletInstance) {
+    syncHeatLayer(heatMode);
+  }
 
   $: if (map && leafletInstance && !modeSwitching) {
     if (animationMode) {
@@ -217,6 +257,13 @@
         clearAllMarkers(map);
         animator?.reset();
       }
+    } else if (heatMode) {
+      // The wash carries the whole story in this mode; markers on top of it
+      // would just be visual noise.
+      modeSwitching = true;
+      clearAllMarkers(map);
+      animator?.pause();
+      modeSwitching = false;
     } else {
       modeSwitching = true;
       clearAllMarkers(map);
@@ -242,6 +289,7 @@
       map.remove();
       map = null;
     }
+    heatLayer = null;
     liveMarker = null;
   });
 </script>
