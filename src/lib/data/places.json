@@ -1281,5 +1281,16 @@
     "Longitude": -2.2426,
     "Notes": "I like this city better than London",
     "Ratings": 5
+  },
+  {
+    "City": "Ston",
+    "Date": "August 2026",
+    "Start": "2026-08-26",
+    "End": "2026-08-26",
+    "Days": 1,
+    "Latitude": 42.8378,
+    "Longitude": 17.6975,
+    "Notes": "",
+    "Ratings": ""
   }
 ]
